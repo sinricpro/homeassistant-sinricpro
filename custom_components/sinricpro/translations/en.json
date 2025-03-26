@@ -1,0 +1,32 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to SinricPro",
+        "description": "Enter your SinricPro API Key",
+        "data": {
+          "api_key": "API Key"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to SinricPro, please check your internet connection",
+      "invalid_auth": "Invalid API Key",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "SinricPro is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SinricPro Options",
+        "description": "Configure SinricPro integration options",
+        "data": {
+          "sync_interval": "Sync interval (in seconds)"
+        }
+      }
+    }
+  }
+}

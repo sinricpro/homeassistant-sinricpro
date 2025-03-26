@@ -1,0 +1,25 @@
+refresh_devices:
+  name: Refresh devices
+  description: Refresh devices from SinricPro and reload the integration
+  
+set_device_state:
+  name: Set device state
+  description: Set the state of a SinricPro device
+  fields:
+    device_id:
+      name: Device ID
+      description: The ID of the SinricPro device
+      required: true
+      example: "5f36d0cdb7b0c16456xxxxx"
+      selector:
+        text:
+    state:
+      name: State
+      description: JSON data representing the device state
+      required: true
+      example: '{"powerState": "On"}'
+      selector:
+        object:
+          
+# Notes on state format for different device types:
+# Switch device: {"powerState": "On"} or {"powerState": "Off"}

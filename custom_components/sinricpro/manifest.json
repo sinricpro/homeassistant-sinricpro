@@ -1,0 +1,16 @@
+{
+  "domain": "sinricpro",
+  "name": "SinricPro",
+  "config_flow": true,
+  "documentation": "https://github.com/sinricpro/homeassistant-sinricpro",
+  "requirements": [
+    "sinricpro==2.0.0"
+  ],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": ["@sinricpro"],
+  "iot_class": "cloud_push",
+  "version": "1.0.0"
+}
