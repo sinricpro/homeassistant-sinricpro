@@ -1,6 +1,6 @@
 """SinricPro switch platform."""
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
@@ -24,14 +24,14 @@ async def async_setup_entry(
     """Set up SinricPro switches."""
     entry_data = hass.data[DOMAIN][config_entry.entry_id]
     client = entry_data["client"]
-    
+
     # Get all switch devices from SinricPro
     devices = client.get_devices().get("switch", {})
-    
+
     if not devices:
         _LOGGER.info("No switch devices found in SinricPro account")
         return
-    
+
     # Create update coordinator
     async def async_update_data():
         """Fetch data from API endpoint."""
