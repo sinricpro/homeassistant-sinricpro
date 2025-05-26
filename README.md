@@ -1,5 +1,7 @@
 # SinricPro for Home Assistant
 
+### Still under development!
+
 This custom component integrates [SinricPro](https://sinric.pro/) with Home Assistant, allowing you to control your Home Assistant devices from Amazon Alexa, Google Home, and other SinricPro-supported platforms.
 
 ## Features
