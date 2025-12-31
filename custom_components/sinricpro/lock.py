@@ -1,10 +1,10 @@
-"""Switch platform for SinricPro."""
+"""Lock platform for SinricPro."""
 from __future__ import annotations
 
 import logging
 from typing import Any
 
-from homeassistant.components.switch import SwitchEntity
+from homeassistant.components.lock import LockEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import CALLBACK_TYPE
 from homeassistant.core import HomeAssistant
@@ -16,8 +16,12 @@ from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .api import Device
-from .const import DEVICE_TYPE_SWITCH
+from .const import DEVICE_TYPE_SMARTLOCK
 from .const import DOMAIN
+from .const import LOCK_ACTION_LOCK
+from .const import LOCK_ACTION_UNLOCK
+from .const import LOCK_STATE_LOCKED
+from .const import LOCK_STATE_UNLOCKED
 from .const import MANUFACTURER
 from .coordinator import SinricProDataUpdateCoordinator
 from .exceptions import (
@@ -37,7 +41,7 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up SinricPro switches from a config entry.
+    """Set up SinricPro locks from a config entry.
 
     Args:
         hass: Home Assistant instance.
@@ -46,19 +50,19 @@ async def async_setup_entry(
     """
     coordinator: SinricProDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
-    # Filter for switch devices only
-    switches = [
-        SinricProSwitch(coordinator, device_id, entry)
+    # Filter for lock devices only
+    locks = [
+        SinricProLock(coordinator, device_id, entry)
         for device_id, device in coordinator.data.items()
-        if device.device_type == DEVICE_TYPE_SWITCH
+        if device.device_type == DEVICE_TYPE_SMARTLOCK
     ]
 
-    _LOGGER.debug("Adding %d switch entities", len(switches))
-    async_add_entities(switches)
+    _LOGGER.debug("Adding %d lock entities", len(locks))
+    async_add_entities(locks)
 
 
-class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchEntity):
-    """Representation of a SinricPro switch."""
+class SinricProLock(CoordinatorEntity[SinricProDataUpdateCoordinator], LockEntity):
+    """Representation of a SinricPro lock."""
 
     _attr_has_entity_name = True
 
@@ -68,7 +72,7 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
         device_id: str,
         entry: ConfigEntry,
     ) -> None:
-        """Initialize the switch.
+        """Initialize the lock.
 
         Args:
             coordinator: Data update coordinator.
@@ -79,7 +83,7 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
         self._device_id = device_id
         self._attr_unique_id = f"{entry.entry_id}_{device_id}"
         self._pending_command: bool = False
-        self._pending_target_state: bool | None = None
+        self._pending_target_state: str | None = None
         self._pending_timeout_cancel: CALLBACK_TYPE | None = None
 
     @property
@@ -91,23 +95,37 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
 
     @property
     def name(self) -> str | None:
-        """Return the name of the switch."""
+        """Return the name of the lock."""
         device = self._device
         if device:
             return device.name
         return None
 
     @property
-    def is_on(self) -> bool | None:
-        """Return True if the switch is on."""
+    def is_locked(self) -> bool | None:
+        """Return True if the lock is locked."""
         # Return None (unknown state) while waiting for SSE confirmation
         if self._pending_command:
             return None
 
         device = self._device
-        if device:
-            return device.power_state
+        if device and device.lock_state is not None:
+            return device.lock_state == LOCK_STATE_LOCKED
         return None
+
+    @property
+    def is_locking(self) -> bool:
+        """Return True if the lock is locking."""
+        if self._pending_command:
+            return self._pending_target_state == LOCK_STATE_LOCKED
+        return False
+
+    @property
+    def is_unlocking(self) -> bool:
+        """Return True if the lock is unlocking."""
+        if self._pending_command:
+            return self._pending_target_state != LOCK_STATE_LOCKED
+        return False
 
     @property
     def available(self) -> bool:
@@ -121,13 +139,13 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
 
     @property
     def device_info(self) -> DeviceInfo:
-        """Return device info for the switch."""
+        """Return device info for the lock."""
         device = self._device
         return DeviceInfo(
             identifiers={(DOMAIN, self._device_id)},
             name=device.name if device else self._device_id,
             manufacturer=MANUFACTURER,
-            model="Switch",
+            model="Smart Lock",
         )
 
     @callback
@@ -135,14 +153,19 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
         """Handle updated data from the coordinator."""
         if self._pending_command:
             device = self._device
-            if device and device.power_state == self._pending_target_state:
-                # SSE confirmed the state change
-                _LOGGER.debug(
-                    "SSE confirmed state change for %s to %s",
-                    self._device_id,
-                    "on" if self._pending_target_state else "off",
+            if device:
+                # Check if state matches expected
+                state_matches = (
+                    self._pending_target_state is None
+                    or device.lock_state == self._pending_target_state
                 )
-                self._clear_pending_state()
+
+                if state_matches:
+                    _LOGGER.debug(
+                        "SSE confirmed state change for %s",
+                        self._device_id,
+                    )
+                    self._clear_pending_state()
 
         self.async_write_ha_state()
 
@@ -165,37 +188,43 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
             self._clear_pending_state()
             self.async_write_ha_state()
 
-    async def async_turn_on(self, **kwargs: Any) -> None:
-        """Turn the switch on.
+    async def async_lock(self, **kwargs: Any) -> None:
+        """Lock the lock.
 
         Raises:
             HomeAssistantError: If the operation fails.
         """
-        await self._set_power_state(True)
+        await self._set_lock_state(True)
 
-    async def async_turn_off(self, **kwargs: Any) -> None:
-        """Turn the switch off.
+    async def async_unlock(self, **kwargs: Any) -> None:
+        """Unlock the lock.
 
         Raises:
             HomeAssistantError: If the operation fails.
         """
-        await self._set_power_state(False)
+        await self._set_lock_state(False)
 
-    async def _set_power_state(self, state: bool) -> None:
-        """Set the power state of the switch.
+    async def _set_lock_state(self, locked: bool) -> None:
+        """Set the lock state.
 
         Args:
-            state: True for on, False for off.
+            locked: True to lock, False to unlock.
 
         Raises:
             HomeAssistantError: If the operation fails.
         """
-        # Set pending state - switch will show as unknown until SSE confirms
+        # Determine the action and expected state
+        action = LOCK_ACTION_LOCK if locked else LOCK_ACTION_UNLOCK
+        expected_state = LOCK_STATE_LOCKED if locked else LOCK_STATE_UNLOCKED
+
+        # Set pending state - lock will show as unknown until SSE confirms
         self._pending_command = True
-        self._pending_target_state = state
+        self._pending_target_state = expected_state
         self.async_write_ha_state()
 
         # Set timeout for SSE confirmation
+        if self._pending_timeout_cancel:
+            self._pending_timeout_cancel()
         self._pending_timeout_cancel = async_call_later(
             self.hass,
             PENDING_STATE_TIMEOUT,
@@ -203,13 +232,12 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
         )
 
         try:
-            await self.coordinator.api.set_power_state(self._device_id, state)
+            await self.coordinator.api.set_lock_state(self._device_id, action)
             _LOGGER.debug(
-                "Command sent for %s to %s, waiting for SSE confirmation",
+                "Lock command sent for %s to %s, waiting for SSE confirmation",
                 self._device_id,
-                "on" if state else "off",
+                action,
             )
-            # Don't update state here - wait for SSE to confirm
 
         except SinricProDeviceOfflineError as err:
             self._clear_pending_state()
@@ -219,10 +247,9 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
             ) from err
 
         except SinricProTimeoutError as err:
-            # Retry once
-            _LOGGER.debug("Timeout setting power state, retrying once")
+            _LOGGER.debug("Timeout setting lock state, retrying once")
             try:
-                await self.coordinator.api.set_power_state(self._device_id, state)
+                await self.coordinator.api.set_lock_state(self._device_id, action)
             except SinricProError:
                 self._clear_pending_state()
                 self.async_write_ha_state()

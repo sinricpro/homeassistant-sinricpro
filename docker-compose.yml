@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    volumes:
+      # Home Assistant config directory
+      - ./ha_config:/config
+      # Mount custom component (read-only for safety)
+      - ./custom_components/sinricpro:/config/custom_components/sinricpro:ro
+      # Timezone
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=UTC
+    ports:
+      - "8123:8123"
+    restart: unless-stopped
