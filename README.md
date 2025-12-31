@@ -73,6 +73,8 @@ This integration supports **16 SinricPro device types** mapped to Home Assistant
 | **Motion Sensor** | `binary_sensor` | Motion detected/not detected |
 | **Temperature Sensor** | `sensor` | Temperature (°C), Humidity (%) |
 
+**SinricPro's custom device types not yet supported**
+
 ### Device Features Details
 
 #### Climate Devices (Thermostat & AC Unit)
