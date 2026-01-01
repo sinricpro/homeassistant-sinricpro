@@ -9,6 +9,7 @@ import logging
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import cast
 
 import aiohttp
 
@@ -271,12 +272,12 @@ class SinricProSSE:
         if event_name in ("deviceConnected", "deviceDisconnected"):
             # Device ID is in data['device']['id']
             device = data.get("device", {})
-            return device.get("id")
+            return cast(str | None, device.get("id"))
 
         if event_name == "deviceMessageArrived":
             # Device ID is in data['message']['deviceId']
             message = data.get("message", {})
-            return message.get("deviceId")
+            return cast(str | None, message.get("deviceId"))
 
         # Fallback to top-level deviceId
         return data.get("deviceId") or data.get("device_id")

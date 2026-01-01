@@ -5,10 +5,10 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import voluptuous as vol
+import voluptuous as vol  # type: ignore[import-untyped]
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.config_entries import ConfigFlow
-from homeassistant.config_entries import ConfigFlowResult
+from homeassistant.config_entries import ConfigFlowResult  # type: ignore[attr-defined]
 from homeassistant.config_entries import OptionsFlow
 from homeassistant.const import CONF_API_KEY
 from homeassistant.core import callback

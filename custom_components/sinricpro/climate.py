@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from typing import cast
 from typing import ClassVar
+from typing import cast
 
 from homeassistant.components.climate import FAN_HIGH
 from homeassistant.components.climate import FAN_LOW
@@ -100,7 +102,7 @@ class SinricProThermostat(CoordinatorEntity[SinricProDataUpdateCoordinator], Cli
 
     _attr_has_entity_name = True
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
-    _attr_hvac_modes: ClassVar[list[HVACMode]] = [
+    _attr_hvac_modes: ClassVar[list[HVACMode]] = [  # type: ignore[misc]
         HVACMode.OFF,
         HVACMode.HEAT,
         HVACMode.COOL,
@@ -155,7 +157,7 @@ class SinricProThermostat(CoordinatorEntity[SinricProDataUpdateCoordinator], Cli
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:

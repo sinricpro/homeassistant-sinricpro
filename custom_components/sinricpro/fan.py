@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import math
 from typing import Any
+from typing import cast
 
 from homeassistant.components.fan import FanEntity
 from homeassistant.components.fan import FanEntityFeature
@@ -64,9 +65,7 @@ class SinricProFan(CoordinatorEntity[SinricProDataUpdateCoordinator], FanEntity)
     """Representation of a SinricPro fan."""
 
     _attr_has_entity_name = True
-    _attr_supported_features = (
-        FanEntityFeature.SET_SPEED | FanEntityFeature.TURN_ON | FanEntityFeature.TURN_OFF
-    )
+    _attr_supported_features = FanEntityFeature.SET_SPEED
 
     def __init__(
         self,
@@ -94,7 +93,7 @@ class SinricProFan(CoordinatorEntity[SinricProDataUpdateCoordinator], FanEntity)
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def _speed_range(self) -> tuple[int, int]:

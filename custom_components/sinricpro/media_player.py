@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from typing import cast
 
 from homeassistant.components.media_player import MediaPlayerEntity
 from homeassistant.components.media_player import MediaPlayerEntityFeature
@@ -114,7 +115,7 @@ class SinricProSpeaker(CoordinatorEntity[SinricProDataUpdateCoordinator], MediaP
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:

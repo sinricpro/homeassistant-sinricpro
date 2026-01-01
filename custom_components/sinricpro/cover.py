@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from typing import cast
 
 from homeassistant.components.cover import ATTR_POSITION
 from homeassistant.components.cover import CoverDeviceClass
@@ -98,7 +99,7 @@ class SinricProCover(CoordinatorEntity[SinricProDataUpdateCoordinator], CoverEnt
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:
@@ -322,7 +323,7 @@ class SinricProGarageDoor(CoordinatorEntity[SinricProDataUpdateCoordinator], Cov
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:

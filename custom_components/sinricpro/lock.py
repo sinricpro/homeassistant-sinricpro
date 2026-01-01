@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from typing import cast
 
 from homeassistant.components.lock import LockEntity
 from homeassistant.config_entries import ConfigEntry
@@ -90,7 +91,7 @@ class SinricProLock(CoordinatorEntity[SinricProDataUpdateCoordinator], LockEntit
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:

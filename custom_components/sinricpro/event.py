@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from typing import ClassVar
+from typing import cast
 
 from homeassistant.components.event import EventDeviceClass
 from homeassistant.components.event import EventEntity
@@ -55,7 +57,7 @@ class SinricProDoorbellEvent(CoordinatorEntity[SinricProDataUpdateCoordinator], 
 
     _attr_has_entity_name = True
     _attr_device_class = EventDeviceClass.DOORBELL
-    _attr_event_types: ClassVar[list[str]] = [EVENT_TYPE_DOORBELL_PRESSED]
+    _attr_event_types: ClassVar[list[str]] = [EVENT_TYPE_DOORBELL_PRESSED]  # type: ignore[misc]
     _attr_translation_key = "doorbell"
 
     def __init__(
@@ -74,14 +76,14 @@ class SinricProDoorbellEvent(CoordinatorEntity[SinricProDataUpdateCoordinator], 
         super().__init__(coordinator)
         self._device_id = device_id
         self._attr_unique_id = f"{entry.entry_id}_{device_id}_event"
-        self._unregister_callback: callable | None = None
+        self._unregister_callback: Callable[[], None] | None = None
 
     @property
     def _device(self) -> Device | None:
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:

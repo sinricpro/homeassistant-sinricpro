@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import cast
 
 from homeassistant.components.button import ButtonDeviceClass
 from homeassistant.components.button import ButtonEntity
@@ -78,7 +79,7 @@ class SinricProDoorbellButton(CoordinatorEntity[SinricProDataUpdateCoordinator],
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:

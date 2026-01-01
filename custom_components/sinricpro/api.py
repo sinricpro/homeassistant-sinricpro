@@ -10,6 +10,7 @@ import uuid
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import cast
 
 import aiohttp
 
@@ -349,7 +350,7 @@ class SinricProApi:
             )
 
         try:
-            return await response.json()
+            return cast(dict[str, Any], await response.json())
         except (aiohttp.ContentTypeError, ValueError) as err:
             _LOGGER.warning("Failed to parse JSON response: %s", err)
             return {}

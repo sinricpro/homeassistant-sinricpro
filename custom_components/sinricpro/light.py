@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from typing import cast
 
 from homeassistant.components.light import ATTR_BRIGHTNESS
 from homeassistant.components.light import ATTR_COLOR_TEMP_KELVIN
@@ -123,7 +124,7 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def _is_dimmable_switch(self) -> bool:
