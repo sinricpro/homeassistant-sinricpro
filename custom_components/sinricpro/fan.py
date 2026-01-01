@@ -105,9 +105,6 @@ class SinricProFan(CoordinatorEntity[SinricProDataUpdateCoordinator], FanEntity)
     @property
     def name(self) -> str | None:
         """Return the name of the fan."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property

@@ -161,9 +161,6 @@ class SinricProThermostat(CoordinatorEntity[SinricProDataUpdateCoordinator], Cli
     @property
     def name(self) -> str | None:
         """Return the name of the thermostat."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property

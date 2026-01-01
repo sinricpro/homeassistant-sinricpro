@@ -96,9 +96,6 @@ class SinricProLock(CoordinatorEntity[SinricProDataUpdateCoordinator], LockEntit
     @property
     def name(self) -> str | None:
         """Return the name of the lock."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property

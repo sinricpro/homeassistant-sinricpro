@@ -86,7 +86,7 @@ class SinricProDoorbellButton(CoordinatorEntity[SinricProDataUpdateCoordinator],
         """Return the name of the button entity."""
         device = self._device
         if device:
-            return f"{device.name} Ring"
+            return "Ring"
         return None
 
     @property

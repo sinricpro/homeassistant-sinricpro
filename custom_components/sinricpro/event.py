@@ -90,7 +90,7 @@ class SinricProDoorbellEvent(CoordinatorEntity[SinricProDataUpdateCoordinator], 
         """Return the name of the event entity."""
         device = self._device
         if device:
-            return f"{device.name} Doorbell"
+            return "Doorbell"
         return None
 
     @property

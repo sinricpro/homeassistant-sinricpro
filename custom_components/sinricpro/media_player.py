@@ -120,9 +120,6 @@ class SinricProSpeaker(CoordinatorEntity[SinricProDataUpdateCoordinator], MediaP
     @property
     def name(self) -> str | None:
         """Return the name of the speaker."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property

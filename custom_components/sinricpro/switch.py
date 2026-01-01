@@ -92,9 +92,6 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
     @property
     def name(self) -> str | None:
         """Return the name of the switch."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property

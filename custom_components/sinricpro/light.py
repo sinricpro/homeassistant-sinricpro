@@ -135,9 +135,6 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
     @property
     def name(self) -> str | None:
         """Return the name of the light."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property

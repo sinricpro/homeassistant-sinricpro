@@ -104,9 +104,6 @@ class SinricProCover(CoordinatorEntity[SinricProDataUpdateCoordinator], CoverEnt
     @property
     def name(self) -> str | None:
         """Return the name of the cover."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property
@@ -328,9 +325,6 @@ class SinricProGarageDoor(CoordinatorEntity[SinricProDataUpdateCoordinator], Cov
     @property
     def name(self) -> str | None:
         """Return the name of the garage door."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property

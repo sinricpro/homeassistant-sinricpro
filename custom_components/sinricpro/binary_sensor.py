@@ -94,9 +94,6 @@ class SinricProContactSensor(CoordinatorEntity[SinricProDataUpdateCoordinator], 
     @property
     def name(self) -> str | None:
         """Return the name of the sensor entity."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property
@@ -158,9 +155,6 @@ class SinricProMotionSensor(CoordinatorEntity[SinricProDataUpdateCoordinator], B
     @property
     def name(self) -> str | None:
         """Return the name of the sensor entity."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property

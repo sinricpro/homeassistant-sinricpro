@@ -8,13 +8,13 @@ from typing import Final
 DOMAIN: Final = "sinricpro"
 
 # API endpoints
-API_BASE_URL: Final = "https://api.sinric.pro"
+# API_BASE_URL: Final = "https://api.sinric.pro"
 API_DEVICES_ENDPOINT: Final = "/api/v1/devices"
 API_ACTION_ENDPOINT: Final = "/api/v1/devices/{device_id}/action"
-SSE_URL: Final = "https://portal.sinric.pro/sse/stream"  # TBD
+# SSE_URL: Final = "https://portal.sinric.pro/sse/stream"  # TBD
 
-# API_BASE_URL: Final = "http://192.168.1.134:5002"
-# SSE_URL: Final = "http://192.168.1.134:6004/sse/stream"
+API_BASE_URL: Final = "http://192.168.1.134:5002"
+SSE_URL: Final = "http://192.168.1.134:6004/sse/stream"
 
 # API headers
 HEADER_API_KEY: Final = "x-sinric-api-key"
@@ -88,7 +88,7 @@ CLIENT_ID: Final = "home-assistant"
 
 # Timeouts and intervals (in seconds)
 DEFAULT_TIMEOUT: Final = 30
-DEFAULT_SCAN_INTERVAL: Final = 300  # 5 minutes
+DEFAULT_SCAN_INTERVAL: Final = 1800  # 30 minutes
 
 # SSE reconnection settings
 SSE_INITIAL_BACKOFF: Final = 1  # seconds
