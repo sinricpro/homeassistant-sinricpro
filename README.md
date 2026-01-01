@@ -173,10 +173,6 @@ If you encounter issues:
    - Relevant logs
    - Steps to reproduce
 
-## Contributing
-
-Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting a pull request.
-
 ### Development Setup
 
 1. Clone the repository

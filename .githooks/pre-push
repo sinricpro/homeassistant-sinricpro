@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Pre-push hook for SinricPro Home Assistant Integration
+# Runs ruff, mypy, and tests before allowing push
+
+# Detect Windows and use PowerShell script
+if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]] || [[ -n "$WINDIR" ]]; then
+    powershell.exe -ExecutionPolicy Bypass -File .githooks/pre-push.ps1
+    exit $?
+fi
+
+set -e
+
+echo "🔍 Running pre-push checks..."
+echo ""
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Track if any check fails
+CHECKS_FAILED=0
+
+# Check 1: Ruff format
+echo "📝 Checking code formatting with ruff..."
+if ruff format --check . > /dev/null 2>&1; then
+    echo -e "${GREEN}✓ Code formatting check passed${NC}"
+else
+    echo -e "${RED}✗ Code formatting check failed${NC}"
+    echo "  Run: ruff format ."
+    CHECKS_FAILED=1
+fi
+echo ""
+
+# Check 2: Ruff lint
+echo "🔎 Running ruff linter..."
+if ruff check . > /dev/null 2>&1; then
+    echo -e "${GREEN}✓ Ruff linting passed${NC}"
+else
+    echo -e "${RED}✗ Ruff linting failed${NC}"
+    echo "  Run: ruff check . --fix"
+    CHECKS_FAILED=1
+fi
+echo ""
+
+# Check 3: MyPy type checking
+echo "🔬 Running mypy type checking..."
+if mypy custom_components/sinricpro > /dev/null 2>&1; then
+    echo -e "${GREEN}✓ MyPy type checking passed${NC}"
+else
+    echo -e "${RED}✗ MyPy type checking failed${NC}"
+    echo "  Run: mypy custom_components/sinricpro"
+    CHECKS_FAILED=1
+fi
+echo ""
+
+# Check 4: Tests
+echo "🧪 Running tests..."
+if pytest tests/ -q > /dev/null 2>&1; then
+    echo -e "${GREEN}✓ All tests passed${NC}"
+else
+    echo -e "${RED}✗ Tests failed${NC}"
+    echo "  Run: pytest tests/ -v"
+    CHECKS_FAILED=1
+fi
+echo ""
+
+# Final result
+if [ $CHECKS_FAILED -eq 1 ]; then
+    echo -e "${RED}❌ Pre-push checks failed. Please fix the issues before pushing.${NC}"
+    echo ""
+    echo "To skip this hook (not recommended), use:"
+    echo "  git push --no-verify"
+    exit 1
+else
+    echo -e "${GREEN}✅ All pre-push checks passed! Proceeding with push...${NC}"
+    exit 0
+fi
