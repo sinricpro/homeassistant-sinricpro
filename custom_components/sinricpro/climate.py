@@ -1,4 +1,5 @@
 """Climate platform for SinricPro (Thermostats)."""
+
 from __future__ import annotations
 
 import logging
@@ -94,9 +95,7 @@ async def async_setup_entry(
     async_add_entities(climate_devices)
 
 
-class SinricProThermostat(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], ClimateEntity
-):
+class SinricProThermostat(CoordinatorEntity[SinricProDataUpdateCoordinator], ClimateEntity):
     """Representation of a SinricPro thermostat or AC unit."""
 
     _attr_has_entity_name = True
@@ -175,9 +174,7 @@ class SinricProThermostat(
 
         device = self._device
         if device and device.thermostat_mode:
-            return SINRIC_TO_HA_HVAC_MODE.get(
-                device.thermostat_mode, HVACMode.OFF
-            )
+            return SINRIC_TO_HA_HVAC_MODE.get(device.thermostat_mode, HVACMode.OFF)
         return HVACMode.OFF
 
     @property
@@ -219,11 +216,7 @@ class SinricProThermostat(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -245,9 +238,7 @@ class SinricProThermostat(
                 # Check if HVAC mode matches expected
                 hvac_mode_matches = True
                 if self._pending_hvac_mode is not None:
-                    expected_sinric_mode = HA_TO_SINRIC_HVAC_MODE.get(
-                        self._pending_hvac_mode
-                    )
+                    expected_sinric_mode = HA_TO_SINRIC_HVAC_MODE.get(self._pending_hvac_mode)
                     hvac_mode_matches = device.thermostat_mode == expected_sinric_mode
 
                 # Check if target temperature matches expected
@@ -259,9 +250,7 @@ class SinricProThermostat(
                 # Check if fan mode matches expected (AC units only)
                 fan_mode_matches = True
                 if self._pending_fan_mode is not None and self._is_ac_unit:
-                    expected_range_value = HA_TO_SINRIC_FAN_MODE.get(
-                        self._pending_fan_mode
-                    )
+                    expected_range_value = HA_TO_SINRIC_FAN_MODE.get(self._pending_fan_mode)
                     fan_mode_matches = device.range_value == expected_range_value
 
                 if hvac_mode_matches and temp_matches and fan_mode_matches:
@@ -323,9 +312,7 @@ class SinricProThermostat(
         )
 
         try:
-            await self.coordinator.api.set_thermostat_mode(
-                self._device_id, sinric_mode
-            )
+            await self.coordinator.api.set_thermostat_mode(self._device_id, sinric_mode)
             _LOGGER.debug(
                 "Thermostat mode command sent for %s to %s, waiting for SSE confirmation",
                 self._device_id,
@@ -342,9 +329,7 @@ class SinricProThermostat(
         except SinricProTimeoutError as err:
             _LOGGER.debug("Timeout setting thermostat mode, retrying once")
             try:
-                await self.coordinator.api.set_thermostat_mode(
-                    self._device_id, sinric_mode
-                )
+                await self.coordinator.api.set_thermostat_mode(self._device_id, sinric_mode)
             except SinricProError:
                 self._clear_pending_state()
                 self.async_write_ha_state()
@@ -355,9 +340,7 @@ class SinricProThermostat(
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set target temperature.
@@ -387,9 +370,7 @@ class SinricProThermostat(
         )
 
         try:
-            await self.coordinator.api.set_target_temperature(
-                self._device_id, temperature
-            )
+            await self.coordinator.api.set_target_temperature(self._device_id, temperature)
             _LOGGER.debug(
                 "Target temperature command sent for %s to %.1f, waiting for SSE confirmation",
                 self._device_id,
@@ -406,9 +387,7 @@ class SinricProThermostat(
         except SinricProTimeoutError as err:
             _LOGGER.debug("Timeout setting target temperature, retrying once")
             try:
-                await self.coordinator.api.set_target_temperature(
-                    self._device_id, temperature
-                )
+                await self.coordinator.api.set_target_temperature(self._device_id, temperature)
             except SinricProError:
                 self._clear_pending_state()
                 self.async_write_ha_state()
@@ -419,9 +398,7 @@ class SinricProThermostat(
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def async_turn_on(self) -> None:
         """Turn the thermostat on (set to last mode or AUTO).
@@ -473,9 +450,7 @@ class SinricProThermostat(
         )
 
         try:
-            await self.coordinator.api.set_range_value(
-                self._device_id, range_value
-            )
+            await self.coordinator.api.set_range_value(self._device_id, range_value)
             _LOGGER.debug(
                 "Fan mode command sent for %s to %s, waiting for SSE confirmation",
                 self._device_id,
@@ -492,9 +467,7 @@ class SinricProThermostat(
         except SinricProTimeoutError as err:
             _LOGGER.debug("Timeout setting fan mode, retrying once")
             try:
-                await self.coordinator.api.set_range_value(
-                    self._device_id, range_value
-                )
+                await self.coordinator.api.set_range_value(self._device_id, range_value)
             except SinricProError:
                 self._clear_pending_state()
                 self.async_write_ha_state()
@@ -505,6 +478,4 @@ class SinricProThermostat(
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err

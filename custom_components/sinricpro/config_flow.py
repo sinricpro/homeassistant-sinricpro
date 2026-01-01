@@ -1,4 +1,5 @@
 """Config flow for SinricPro integration."""
+
 from __future__ import annotations
 
 import logging
@@ -44,9 +45,7 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
         """Get the options flow for this handler."""
         return SinricProOptionsFlow(config_entry)
 
-    async def async_step_user(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle the initial step.
 
         Args:
@@ -80,9 +79,7 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_reauth(
-        self, entry_data: dict[str, Any]
-    ) -> ConfigFlowResult:
+    async def async_step_reauth(self, entry_data: dict[str, Any]) -> ConfigFlowResult:
         """Handle reauthentication.
 
         Args:
@@ -91,9 +88,7 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
         Returns:
             ConfigFlowResult for the reauth confirm step.
         """
-        self._reauth_entry = self.hass.config_entries.async_get_entry(
-            self.context["entry_id"]
-        )
+        self._reauth_entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
@@ -122,9 +117,7 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
                         self._reauth_entry,
                         data={CONF_API_KEY: api_key},
                     )
-                    await self.hass.config_entries.async_reload(
-                        self._reauth_entry.entry_id
-                    )
+                    await self.hass.config_entries.async_reload(self._reauth_entry.entry_id)
                     return self.async_abort(reason="reauth_successful")
                 return self.async_abort(reason="reauth_failed")
 
@@ -216,9 +209,7 @@ class SinricProOptionsFlow(OptionsFlow):
         """
         self.config_entry = config_entry
 
-    async def async_step_init(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Manage the options.
 
         Args:

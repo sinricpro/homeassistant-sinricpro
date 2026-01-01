@@ -1,4 +1,5 @@
 """Binary Sensor platform for SinricPro (Contact, Motion)."""
+
 from __future__ import annotations
 
 import logging
@@ -38,26 +39,28 @@ async def async_setup_entry(
     binary_sensors: list[BinarySensorEntity] = []
 
     # Filter for contact sensors
-    binary_sensors.extend([
-        SinricProContactSensor(coordinator, device_id, entry)
-        for device_id, device in coordinator.data.items()
-        if device.device_type == DEVICE_TYPE_CONTACT_SENSOR
-    ])
+    binary_sensors.extend(
+        [
+            SinricProContactSensor(coordinator, device_id, entry)
+            for device_id, device in coordinator.data.items()
+            if device.device_type == DEVICE_TYPE_CONTACT_SENSOR
+        ]
+    )
 
     # Filter for motion sensors
-    binary_sensors.extend([
-        SinricProMotionSensor(coordinator, device_id, entry)
-        for device_id, device in coordinator.data.items()
-        if device.device_type == DEVICE_TYPE_MOTION_SENSOR
-    ])
+    binary_sensors.extend(
+        [
+            SinricProMotionSensor(coordinator, device_id, entry)
+            for device_id, device in coordinator.data.items()
+            if device.device_type == DEVICE_TYPE_MOTION_SENSOR
+        ]
+    )
 
     _LOGGER.debug("Adding %d binary sensor entities", len(binary_sensors))
     async_add_entities(binary_sensors)
 
 
-class SinricProContactSensor(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], BinarySensorEntity
-):
+class SinricProContactSensor(CoordinatorEntity[SinricProDataUpdateCoordinator], BinarySensorEntity):
     """Representation of a SinricPro contact sensor."""
 
     _attr_has_entity_name = True
@@ -107,11 +110,7 @@ class SinricProContactSensor(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -125,9 +124,7 @@ class SinricProContactSensor(
         )
 
 
-class SinricProMotionSensor(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], BinarySensorEntity
-):
+class SinricProMotionSensor(CoordinatorEntity[SinricProDataUpdateCoordinator], BinarySensorEntity):
     """Representation of a SinricPro motion sensor."""
 
     _attr_has_entity_name = True
@@ -177,11 +174,7 @@ class SinricProMotionSensor(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:

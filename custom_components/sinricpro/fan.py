@@ -1,4 +1,5 @@
 """Fan platform for SinricPro."""
+
 from __future__ import annotations
 
 import logging
@@ -64,9 +65,7 @@ class SinricProFan(CoordinatorEntity[SinricProDataUpdateCoordinator], FanEntity)
 
     _attr_has_entity_name = True
     _attr_supported_features = (
-        FanEntityFeature.SET_SPEED
-        | FanEntityFeature.TURN_ON
-        | FanEntityFeature.TURN_OFF
+        FanEntityFeature.SET_SPEED | FanEntityFeature.TURN_ON | FanEntityFeature.TURN_OFF
     )
 
     def __init__(
@@ -141,11 +140,7 @@ class SinricProFan(CoordinatorEntity[SinricProDataUpdateCoordinator], FanEntity)
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -303,9 +298,7 @@ class SinricProFan(CoordinatorEntity[SinricProDataUpdateCoordinator], FanEntity)
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def _set_percentage(self, percentage: int) -> None:
         """Set the speed percentage.
@@ -365,6 +358,4 @@ class SinricProFan(CoordinatorEntity[SinricProDataUpdateCoordinator], FanEntity)
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err

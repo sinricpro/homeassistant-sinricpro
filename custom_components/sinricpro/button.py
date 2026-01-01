@@ -1,4 +1,5 @@
 """Button platform for SinricPro (Doorbell trigger)."""
+
 from __future__ import annotations
 
 import logging
@@ -49,9 +50,7 @@ async def async_setup_entry(
     async_add_entities(buttons)
 
 
-class SinricProDoorbellButton(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], ButtonEntity
-):
+class SinricProDoorbellButton(CoordinatorEntity[SinricProDataUpdateCoordinator], ButtonEntity):
     """Representation of a SinricPro doorbell button."""
 
     _attr_has_entity_name = True
@@ -93,11 +92,7 @@ class SinricProDoorbellButton(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -138,6 +133,4 @@ class SinricProDoorbellButton(
                 ) from err
 
         except SinricProError as err:
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err

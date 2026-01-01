@@ -1,4 +1,5 @@
 """Switch platform for SinricPro."""
+
 from __future__ import annotations
 
 import logging
@@ -111,11 +112,7 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -231,6 +228,4 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err

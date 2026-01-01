@@ -1,4 +1,5 @@
 """Light platform for SinricPro."""
+
 from __future__ import annotations
 
 import logging
@@ -41,7 +42,6 @@ HA_BRIGHTNESS_MAX = 255
 SINRIC_BRIGHTNESS_MAX = 100
 
 
-
 def sinric_to_ha_brightness(sinric_brightness: int) -> int:
     """Convert SinricPro brightness (0-100) to Home Assistant brightness (0-255)."""
     return round(sinric_brightness * HA_BRIGHTNESS_MAX / SINRIC_BRIGHTNESS_MAX)
@@ -50,8 +50,6 @@ def sinric_to_ha_brightness(sinric_brightness: int) -> int:
 def ha_to_sinric_brightness(ha_brightness: int) -> int:
     """Convert Home Assistant brightness (0-255) to SinricPro brightness (0-100)."""
     return round(ha_brightness * SINRIC_BRIGHTNESS_MAX / HA_BRIGHTNESS_MAX)
-
-
 
 
 async def async_setup_entry(
@@ -191,11 +189,7 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -232,8 +226,7 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
                     )
                 # Check if color matches expected
                 color_matches = (
-                    self._pending_target_color is None
-                    or device.color == self._pending_target_color
+                    self._pending_target_color is None or device.color == self._pending_target_color
                 )
                 # Check if color temperature matches expected
                 color_temp_matches = (
@@ -373,9 +366,7 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def _set_brightness(self, brightness: int) -> None:
         """Set the brightness of the light.
@@ -429,9 +420,7 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def _set_power_level(self, power_level: int) -> None:
         """Set the power level of the dimmable switch.
@@ -485,9 +474,7 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def _set_color(self, red: int, green: int, blue: int) -> None:
         """Set the color of the light.
@@ -545,9 +532,7 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def _set_color_temperature(self, color_temperature: int) -> None:
         """Set the color temperature of the light.
@@ -573,9 +558,7 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
         )
 
         try:
-            await self.coordinator.api.set_color_temperature(
-                self._device_id, color_temperature
-            )
+            await self.coordinator.api.set_color_temperature(self._device_id, color_temperature)
             _LOGGER.debug(
                 "Color temperature command sent for %s to %dK, waiting for SSE confirmation",
                 self._device_id,
@@ -592,9 +575,7 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
         except SinricProTimeoutError as err:
             _LOGGER.debug("Timeout setting color temperature, retrying once")
             try:
-                await self.coordinator.api.set_color_temperature(
-                    self._device_id, color_temperature
-                )
+                await self.coordinator.api.set_color_temperature(self._device_id, color_temperature)
             except SinricProError:
                 self._clear_pending_state()
                 self.async_write_ha_state()
@@ -605,6 +586,4 @@ class SinricProLight(CoordinatorEntity[SinricProDataUpdateCoordinator], LightEnt
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err

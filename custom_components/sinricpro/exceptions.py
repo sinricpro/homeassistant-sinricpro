@@ -1,4 +1,5 @@
 """Exceptions for the SinricPro integration."""
+
 from __future__ import annotations
 
 

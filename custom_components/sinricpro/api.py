@@ -1,4 +1,5 @@
 """SinricPro API client."""
+
 from __future__ import annotations
 
 import asyncio
@@ -271,9 +272,7 @@ class SinricProApi:
                 )
                 await asyncio.sleep(API_RETRY_BACKOFF * (retry_count + 1))
                 return await self._request(method, endpoint, json_data, retry_count + 1)
-            raise SinricProConnectionError(
-                f"Failed to connect to SinricPro API: {err}"
-            ) from err
+            raise SinricProConnectionError(f"Failed to connect to SinricPro API: {err}") from err
 
     async def _handle_response(
         self,
@@ -301,14 +300,10 @@ class SinricProApi:
         status = response.status
 
         if status in (401, 403):
-            raise SinricProAuthenticationError(
-                "Invalid or expired API key"
-            )
+            raise SinricProAuthenticationError("Invalid or expired API key")
 
         if status == 404:
-            raise SinricProDeviceNotFoundError(
-                f"Device not found: {endpoint}"
-            )
+            raise SinricProDeviceNotFoundError(f"Device not found: {endpoint}")
 
         if status == 429:
             retry_after = response.headers.get("Retry-After")
@@ -329,9 +324,7 @@ class SinricProApi:
                 )
                 await asyncio.sleep(API_RETRY_BACKOFF * (retry_count + 1))
                 return await self._request(method, endpoint, json_data, retry_count + 1)
-            raise SinricProTimeoutError(
-                f"Request timed out with status {status}"
-            )
+            raise SinricProTimeoutError(f"Request timed out with status {status}")
 
         if status in (500, 502, 503):
             if retry_count < API_MAX_RETRIES:
@@ -488,9 +481,7 @@ class SinricProApi:
         )
         return True
 
-    async def set_color(
-        self, device_id: str, red: int, green: int, blue: int
-    ) -> bool:
+    async def set_color(self, device_id: str, red: int, green: int, blue: int) -> bool:
         """Set the color of a light device.
 
         Args:
@@ -966,9 +957,7 @@ class SinricProApi:
         )
         return True
 
-    async def set_target_temperature(
-        self, device_id: str, temperature: float
-    ) -> bool:
+    async def set_target_temperature(self, device_id: str, temperature: float) -> bool:
         """Set the target temperature of a thermostat device.
 
         Args:

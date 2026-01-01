@@ -1,4 +1,5 @@
 """SSE client for SinricPro real-time updates."""
+
 from __future__ import annotations
 
 import asyncio

@@ -1,4 +1,5 @@
 """Sensor platform for SinricPro (Doorbell, Air Quality)."""
+
 from __future__ import annotations
 
 import logging
@@ -44,28 +45,34 @@ async def async_setup_entry(
     sensors: list[SensorEntity] = []
 
     # Filter for doorbell devices and create last ring sensors
-    sensors.extend([
-        SinricProDoorbellLastRingSensor(coordinator, device_id, entry)
-        for device_id, device in coordinator.data.items()
-        if device.device_type == DEVICE_TYPE_DOORBELL
-    ])
+    sensors.extend(
+        [
+            SinricProDoorbellLastRingSensor(coordinator, device_id, entry)
+            for device_id, device in coordinator.data.items()
+            if device.device_type == DEVICE_TYPE_DOORBELL
+        ]
+    )
 
     # Filter for air quality sensors and create PM sensors
     for device_id, device in coordinator.data.items():
         if device.device_type == DEVICE_TYPE_AIR_QUALITY_SENSOR:
-            sensors.extend([
-                SinricProAirQualityPM1Sensor(coordinator, device_id, entry),
-                SinricProAirQualityPM25Sensor(coordinator, device_id, entry),
-                SinricProAirQualityPM10Sensor(coordinator, device_id, entry),
-            ])
+            sensors.extend(
+                [
+                    SinricProAirQualityPM1Sensor(coordinator, device_id, entry),
+                    SinricProAirQualityPM25Sensor(coordinator, device_id, entry),
+                    SinricProAirQualityPM10Sensor(coordinator, device_id, entry),
+                ]
+            )
 
     # Filter for temperature sensors and create temperature/humidity sensors
     for device_id, device in coordinator.data.items():
         if device.device_type == DEVICE_TYPE_TEMPERATURE_SENSOR:
-            sensors.extend([
-                SinricProTemperatureSensor(coordinator, device_id, entry),
-                SinricProHumiditySensor(coordinator, device_id, entry),
-            ])
+            sensors.extend(
+                [
+                    SinricProTemperatureSensor(coordinator, device_id, entry),
+                    SinricProHumiditySensor(coordinator, device_id, entry),
+                ]
+            )
 
     _LOGGER.debug("Adding %d sensor entities", len(sensors))
     async_add_entities(sensors)
@@ -114,9 +121,7 @@ class SinricProDoorbellLastRingSensor(
         device = self._device
         if device and device.last_doorbell_ring:
             try:
-                return datetime.fromisoformat(
-                    device.last_doorbell_ring.replace("Z", "+00:00")
-                )
+                return datetime.fromisoformat(device.last_doorbell_ring.replace("Z", "+00:00"))
             except (ValueError, AttributeError):
                 _LOGGER.warning(
                     "Failed to parse last_doorbell_ring timestamp: %s",
@@ -143,9 +148,7 @@ class SinricProDoorbellLastRingSensor(
         )
 
 
-class SinricProAirQualityPM1Sensor(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], SensorEntity
-):
+class SinricProAirQualityPM1Sensor(CoordinatorEntity[SinricProDataUpdateCoordinator], SensorEntity):
     """Representation of a SinricPro air quality PM1.0 sensor."""
 
     _attr_has_entity_name = True
@@ -194,11 +197,7 @@ class SinricProAirQualityPM1Sensor(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -263,11 +262,7 @@ class SinricProAirQualityPM25Sensor(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -332,11 +327,7 @@ class SinricProAirQualityPM10Sensor(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -350,9 +341,7 @@ class SinricProAirQualityPM10Sensor(
         )
 
 
-class SinricProTemperatureSensor(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], SensorEntity
-):
+class SinricProTemperatureSensor(CoordinatorEntity[SinricProDataUpdateCoordinator], SensorEntity):
     """Representation of a SinricPro temperature sensor."""
 
     _attr_has_entity_name = True
@@ -401,11 +390,7 @@ class SinricProTemperatureSensor(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -419,9 +404,7 @@ class SinricProTemperatureSensor(
         )
 
 
-class SinricProHumiditySensor(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], SensorEntity
-):
+class SinricProHumiditySensor(CoordinatorEntity[SinricProDataUpdateCoordinator], SensorEntity):
     """Representation of a SinricPro humidity sensor."""
 
     _attr_has_entity_name = True
@@ -470,11 +453,7 @@ class SinricProHumiditySensor(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:

@@ -1,4 +1,5 @@
 """Data update coordinator for SinricPro."""
+
 from __future__ import annotations
 
 import asyncio
@@ -115,9 +116,7 @@ class SinricProDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Device]]):
 
         except SinricProAuthenticationError as err:
             # Trigger reauthentication flow
-            raise ConfigEntryAuthFailed(
-                "Invalid API key, reauthentication required"
-            ) from err
+            raise ConfigEntryAuthFailed("Invalid API key, reauthentication required") from err
 
         except SinricProRateLimitError as err:
             _LOGGER.warning(
@@ -137,9 +136,7 @@ class SinricProDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Device]]):
             raise UpdateFailed(f"Unexpected error: {err}") from err
 
     @callback
-    def _handle_sse_event(
-        self, event_name: str, device_id: str, data: dict[str, Any]
-    ) -> None:
+    def _handle_sse_event(self, event_name: str, device_id: str, data: dict[str, Any]) -> None:
         """Handle an SSE event.
 
         Args:
@@ -266,9 +263,7 @@ class SinricProDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Device]]):
         self.async_set_updated_data(self._devices)
 
     @callback
-    def _handle_device_message(
-        self, device_id: str, device: Device, data: dict[str, Any]
-    ) -> None:
+    def _handle_device_message(self, device_id: str, device: Device, data: dict[str, Any]) -> None:
         """Handle device message arrived event.
 
         Args:

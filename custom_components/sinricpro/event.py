@@ -1,4 +1,5 @@
 """Event platform for SinricPro (Doorbell)."""
+
 from __future__ import annotations
 
 import logging
@@ -49,9 +50,7 @@ async def async_setup_entry(
     async_add_entities(events)
 
 
-class SinricProDoorbellEvent(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], EventEntity
-):
+class SinricProDoorbellEvent(CoordinatorEntity[SinricProDataUpdateCoordinator], EventEntity):
     """Representation of a SinricPro doorbell event."""
 
     _attr_has_entity_name = True
@@ -96,11 +95,7 @@ class SinricProDoorbellEvent(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:

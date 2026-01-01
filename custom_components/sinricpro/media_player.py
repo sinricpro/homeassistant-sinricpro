@@ -1,4 +1,5 @@
 """Media Player platform for SinricPro (Speakers)."""
+
 from __future__ import annotations
 
 import logging
@@ -58,9 +59,7 @@ async def async_setup_entry(
     async_add_entities(media_players)
 
 
-class SinricProSpeaker(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], MediaPlayerEntity
-):
+class SinricProSpeaker(CoordinatorEntity[SinricProDataUpdateCoordinator], MediaPlayerEntity):
     """Representation of a SinricPro speaker or TV."""
 
     _attr_has_entity_name = True
@@ -157,11 +156,7 @@ class SinricProSpeaker(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -281,9 +276,7 @@ class SinricProSpeaker(
             ) from err
 
         except SinricProError as err:
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def async_media_previous_track(self) -> None:
         """Send previous track command (channel down for TV).
@@ -301,9 +294,7 @@ class SinricProSpeaker(
             ) from err
 
         except SinricProError as err:
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def async_media_play(self) -> None:
         """Send play command to TV.
@@ -321,9 +312,7 @@ class SinricProSpeaker(
             ) from err
 
         except SinricProError as err:
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def async_media_pause(self) -> None:
         """Send pause command to TV.
@@ -341,9 +330,7 @@ class SinricProSpeaker(
             ) from err
 
         except SinricProError as err:
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def _set_power_state(self, state: bool) -> None:
         """Set the power state of the speaker.
@@ -397,9 +384,7 @@ class SinricProSpeaker(
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def _set_volume(self, volume: int) -> None:
         """Set the volume of the speaker.
@@ -453,9 +438,7 @@ class SinricProSpeaker(
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
     async def _set_mute(self, muted: bool) -> None:
         """Set the mute state of the speaker.
@@ -509,6 +492,4 @@ class SinricProSpeaker(
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
