@@ -17,8 +17,8 @@ from custom_components.sinricpro.const import DEVICE_TYPE_DOORBELL
 from custom_components.sinricpro.const import DEVICE_TYPE_TEMPERATURE_SENSOR
 from custom_components.sinricpro.const import DOMAIN
 from custom_components.sinricpro.const import MANUFACTURER
-from custom_components.sinricpro.sensor import SinricProAirQualityPM10Sensor
 from custom_components.sinricpro.sensor import SinricProAirQualityPM1Sensor
+from custom_components.sinricpro.sensor import SinricProAirQualityPM10Sensor
 from custom_components.sinricpro.sensor import SinricProAirQualityPM25Sensor
 from custom_components.sinricpro.sensor import SinricProDoorbellLastRingSensor
 from custom_components.sinricpro.sensor import SinricProHumiditySensor

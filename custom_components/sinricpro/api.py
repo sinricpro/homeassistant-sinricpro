@@ -12,43 +12,39 @@ from typing import Any
 
 import aiohttp
 
-from .const import (
-    ACTION_DOORBELL_PRESS,
-    ACTION_MEDIA_CONTROL,
-    ACTION_SET_BRIGHTNESS,
-    ACTION_SET_COLOR,
-    ACTION_SET_COLOR_TEMPERATURE,
-    ACTION_SET_LOCK_STATE,
-    ACTION_SET_MODE,
-    ACTION_SET_MUTE,
-    ACTION_SET_POWER_LEVEL,
-    ACTION_SET_POWER_STATE,
-    ACTION_SET_RANGE_VALUE,
-    ACTION_SET_THERMOSTAT_MODE,
-    ACTION_SET_VOLUME,
-    ACTION_SKIP_CHANNELS,
-    ACTION_TARGET_TEMPERATURE,
-    ACTION_TYPE_EVENT,
-    ACTION_TYPE_REQUEST,
-    API_ACTION_ENDPOINT,
-    API_BASE_URL,
-    API_DEVICES_ENDPOINT,
-    API_MAX_RETRIES,
-    API_RETRY_BACKOFF,
-    CLIENT_ID,
-    DEFAULT_TIMEOUT,
-    HEADER_API_KEY,
-    POWER_STATE_OFF,
-    POWER_STATE_ON,
-)
-from .exceptions import (
-    SinricProApiError,
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProDeviceNotFoundError,
-    SinricProRateLimitError,
-    SinricProTimeoutError,
-)
+from .const import ACTION_DOORBELL_PRESS
+from .const import ACTION_MEDIA_CONTROL
+from .const import ACTION_SET_BRIGHTNESS
+from .const import ACTION_SET_COLOR
+from .const import ACTION_SET_COLOR_TEMPERATURE
+from .const import ACTION_SET_LOCK_STATE
+from .const import ACTION_SET_MODE
+from .const import ACTION_SET_MUTE
+from .const import ACTION_SET_POWER_LEVEL
+from .const import ACTION_SET_POWER_STATE
+from .const import ACTION_SET_RANGE_VALUE
+from .const import ACTION_SET_THERMOSTAT_MODE
+from .const import ACTION_SET_VOLUME
+from .const import ACTION_SKIP_CHANNELS
+from .const import ACTION_TARGET_TEMPERATURE
+from .const import ACTION_TYPE_EVENT
+from .const import ACTION_TYPE_REQUEST
+from .const import API_ACTION_ENDPOINT
+from .const import API_BASE_URL
+from .const import API_DEVICES_ENDPOINT
+from .const import API_MAX_RETRIES
+from .const import API_RETRY_BACKOFF
+from .const import CLIENT_ID
+from .const import DEFAULT_TIMEOUT
+from .const import HEADER_API_KEY
+from .const import POWER_STATE_OFF
+from .const import POWER_STATE_ON
+from .exceptions import SinricProApiError
+from .exceptions import SinricProAuthenticationError
+from .exceptions import SinricProConnectionError
+from .exceptions import SinricProDeviceNotFoundError
+from .exceptions import SinricProRateLimitError
+from .exceptions import SinricProTimeoutError
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
@@ -251,7 +247,7 @@ class SinricProApi:
                         response, method, endpoint, json_data, retry_count
                     )
 
-        except asyncio.TimeoutError as err:
+        except TimeoutError as err:
             if retry_count < API_MAX_RETRIES:
                 _LOGGER.debug(
                     "Request timeout for %s, retrying (%d/%d)",

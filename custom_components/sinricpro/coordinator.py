@@ -4,9 +4,9 @@ from __future__ import annotations
 import asyncio
 import logging
 from collections.abc import Callable
+from datetime import UTC
 from datetime import datetime
 from datetime import timedelta
-from datetime import timezone
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -22,12 +22,10 @@ from .api import Device
 from .api import SinricProApi
 from .const import DEFAULT_SCAN_INTERVAL
 from .const import DOMAIN
-from .exceptions import (
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProRateLimitError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProAuthenticationError
+from .exceptions import SinricProConnectionError
+from .exceptions import SinricProRateLimitError
+from .exceptions import SinricProTimeoutError
 from .sse import SinricProSSE
 
 if TYPE_CHECKING:
@@ -287,7 +285,7 @@ class SinricProDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Device]]):
         if action == "DoorbellPress":
             state = value.get("state")
             if state == "pressed":
-                timestamp = datetime.now(timezone.utc).isoformat()
+                timestamp = datetime.now(UTC).isoformat()
                 _LOGGER.info(
                     "SSE update: Device %s (%s) doorbell pressed",
                     device.name,
@@ -598,7 +596,7 @@ class SinricProDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Device]]):
                     changed = True
                     # Update last detection timestamp
                     if contact_state_value == "open":
-                        new_last_contact_detection = datetime.now(timezone.utc).isoformat()
+                        new_last_contact_detection = datetime.now(UTC).isoformat()
 
         # Check for motion sensor state changes
         if action == "motion":
@@ -614,7 +612,7 @@ class SinricProDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Device]]):
                     )
                     changed = True
                     # Update last detection timestamp
-                    new_last_motion_detection = datetime.now(timezone.utc).isoformat()
+                    new_last_motion_detection = datetime.now(UTC).isoformat()
 
         if changed:
             self._devices[device_id] = Device(

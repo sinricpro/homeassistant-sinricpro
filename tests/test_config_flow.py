@@ -11,12 +11,10 @@ from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 
 from custom_components.sinricpro.const import DOMAIN
-from custom_components.sinricpro.exceptions import (
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProRateLimitError,
-    SinricProTimeoutError,
-)
+from custom_components.sinricpro.exceptions import SinricProAuthenticationError
+from custom_components.sinricpro.exceptions import SinricProConnectionError
+from custom_components.sinricpro.exceptions import SinricProRateLimitError
+from custom_components.sinricpro.exceptions import SinricProTimeoutError
 
 pytestmark = pytest.mark.skip(reason="Timezone configuration issue in test environment")
 

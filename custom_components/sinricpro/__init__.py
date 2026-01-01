@@ -15,11 +15,9 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .api import SinricProApi
 from .const import DOMAIN
 from .coordinator import SinricProDataUpdateCoordinator
-from .exceptions import (
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProAuthenticationError
+from .exceptions import SinricProConnectionError
+from .exceptions import SinricProTimeoutError
 
 _LOGGER = logging.getLogger(__name__)
 

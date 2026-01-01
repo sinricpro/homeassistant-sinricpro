@@ -1,27 +1,21 @@
 """Tests for SinricPro API client."""
 from __future__ import annotations
 
-import asyncio
-
 import aiohttp
 import pytest
 from aioresponses import aioresponses
 
 from custom_components.sinricpro.api import Device
 from custom_components.sinricpro.api import SinricProApi
-from custom_components.sinricpro.const import (
-    API_BASE_URL,
-    API_DEVICES_ENDPOINT,
-    DEVICE_TYPE_SWITCH,
-)
-from custom_components.sinricpro.exceptions import (
-    SinricProApiError,
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProDeviceNotFoundError,
-    SinricProRateLimitError,
-    SinricProTimeoutError,
-)
+from custom_components.sinricpro.const import API_BASE_URL
+from custom_components.sinricpro.const import API_DEVICES_ENDPOINT
+from custom_components.sinricpro.const import DEVICE_TYPE_SWITCH
+from custom_components.sinricpro.exceptions import SinricProApiError
+from custom_components.sinricpro.exceptions import SinricProAuthenticationError
+from custom_components.sinricpro.exceptions import SinricProConnectionError
+from custom_components.sinricpro.exceptions import SinricProDeviceNotFoundError
+from custom_components.sinricpro.exceptions import SinricProRateLimitError
+from custom_components.sinricpro.exceptions import SinricProTimeoutError
 
 
 @pytest.fixture
@@ -217,10 +211,10 @@ async def test_api_timeout(api: SinricProApi, api_url: str) -> None:
     """Test timeout error handling."""
     with aioresponses() as m:
         # Simulate timeout for all retries
-        m.get(api_url, exception=asyncio.TimeoutError())
-        m.get(api_url, exception=asyncio.TimeoutError())
-        m.get(api_url, exception=asyncio.TimeoutError())
-        m.get(api_url, exception=asyncio.TimeoutError())
+        m.get(api_url, exception=TimeoutError())
+        m.get(api_url, exception=TimeoutError())
+        m.get(api_url, exception=TimeoutError())
+        m.get(api_url, exception=TimeoutError())
 
         with pytest.raises(SinricProTimeoutError):
             await api.get_devices()

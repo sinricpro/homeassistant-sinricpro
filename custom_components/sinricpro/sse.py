@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import logging
 from collections.abc import Callable
@@ -10,14 +11,12 @@ from typing import Any
 
 import aiohttp
 
-from .const import (
-    HEADER_API_KEY,
-    SSE_BACKOFF_MULTIPLIER,
-    SSE_INITIAL_BACKOFF,
-    SSE_MAX_BACKOFF,
-    SSE_MAX_RECONNECTION_ATTEMPTS,
-    SSE_URL,
-)
+from .const import HEADER_API_KEY
+from .const import SSE_BACKOFF_MULTIPLIER
+from .const import SSE_INITIAL_BACKOFF
+from .const import SSE_MAX_BACKOFF
+from .const import SSE_MAX_RECONNECTION_ATTEMPTS
+from .const import SSE_URL
 from .exceptions import SinricProAuthenticationError
 
 if TYPE_CHECKING:
@@ -84,10 +83,8 @@ class SinricProSSE:
 
         if self._task is not None:
             self._task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self._task
-            except asyncio.CancelledError:
-                pass
             self._task = None
 
         _LOGGER.debug("SSE disconnected")

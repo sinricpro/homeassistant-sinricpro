@@ -1,7 +1,6 @@
 """Tests for SinricPro data coordinator."""
 from __future__ import annotations
 
-from typing import Any
 from unittest.mock import AsyncMock
 from unittest.mock import MagicMock
 from unittest.mock import patch
@@ -13,12 +12,10 @@ from homeassistant.helpers.update_coordinator import UpdateFailed
 
 from custom_components.sinricpro.api import Device
 from custom_components.sinricpro.coordinator import SinricProDataUpdateCoordinator
-from custom_components.sinricpro.exceptions import (
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProRateLimitError,
-    SinricProTimeoutError,
-)
+from custom_components.sinricpro.exceptions import SinricProAuthenticationError
+from custom_components.sinricpro.exceptions import SinricProConnectionError
+from custom_components.sinricpro.exceptions import SinricProRateLimitError
+from custom_components.sinricpro.exceptions import SinricProTimeoutError
 
 pytestmark = pytest.mark.skip(reason="Timezone configuration issue in test environment")
 

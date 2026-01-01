@@ -20,11 +20,9 @@ from .const import DEVICE_TYPE_SWITCH
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .coordinator import SinricProDataUpdateCoordinator
-from .exceptions import (
-    SinricProDeviceOfflineError,
-    SinricProError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProDeviceOfflineError
+from .exceptions import SinricProError
+from .exceptions import SinricProTimeoutError
 
 _LOGGER = logging.getLogger(__name__)
 

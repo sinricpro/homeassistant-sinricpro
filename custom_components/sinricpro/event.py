@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import ClassVar
 
 from homeassistant.components.event import EventDeviceClass
 from homeassistant.components.event import EventEntity
@@ -56,7 +56,7 @@ class SinricProDoorbellEvent(
 
     _attr_has_entity_name = True
     _attr_device_class = EventDeviceClass.DOORBELL
-    _attr_event_types = [EVENT_TYPE_DOORBELL_PRESSED]
+    _attr_event_types: ClassVar[list[str]] = [EVENT_TYPE_DOORBELL_PRESSED]
     _attr_translation_key = "doorbell"
 
     def __init__(

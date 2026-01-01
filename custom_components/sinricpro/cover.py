@@ -4,12 +4,10 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from homeassistant.components.cover import (
-    ATTR_POSITION,
-    CoverDeviceClass,
-    CoverEntity,
-    CoverEntityFeature,
-)
+from homeassistant.components.cover import ATTR_POSITION
+from homeassistant.components.cover import CoverDeviceClass
+from homeassistant.components.cover import CoverEntity
+from homeassistant.components.cover import CoverEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import CALLBACK_TYPE
 from homeassistant.core import HomeAssistant
@@ -28,11 +26,9 @@ from .const import GARAGE_DOOR_MODE_CLOSE
 from .const import GARAGE_DOOR_MODE_OPEN
 from .const import MANUFACTURER
 from .coordinator import SinricProDataUpdateCoordinator
-from .exceptions import (
-    SinricProDeviceOfflineError,
-    SinricProError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProDeviceOfflineError
+from .exceptions import SinricProError
+from .exceptions import SinricProTimeoutError
 
 _LOGGER = logging.getLogger(__name__)
 

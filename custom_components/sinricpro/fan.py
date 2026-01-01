@@ -16,21 +16,17 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.util.percentage import (
-    percentage_to_ranged_value,
-    ranged_value_to_percentage,
-)
+from homeassistant.util.percentage import percentage_to_ranged_value
+from homeassistant.util.percentage import ranged_value_to_percentage
 
 from .api import Device
 from .const import DEVICE_TYPE_FAN
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .coordinator import SinricProDataUpdateCoordinator
-from .exceptions import (
-    SinricProDeviceOfflineError,
-    SinricProError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProDeviceOfflineError
+from .exceptions import SinricProError
+from .exceptions import SinricProTimeoutError
 
 _LOGGER = logging.getLogger(__name__)
 

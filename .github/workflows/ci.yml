@@ -72,20 +72,8 @@ jobs:
             pip install homeassistant
           fi
 
-      - name: Run pytest with coverage
-        run: |
-          pytest tests/ \
-            --cov=custom_components/sinricpro \
-            --cov-report=xml \
-            --cov-report=term-missing \
-            -v
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: false
+      - name: Run tests
+        run: pytest tests/ -v
 
   validate:
     name: Validate Integration

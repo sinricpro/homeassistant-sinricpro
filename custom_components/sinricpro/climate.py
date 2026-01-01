@@ -3,12 +3,13 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from typing import ClassVar
 
-from homeassistant.components.climate import ClimateEntity
-from homeassistant.components.climate import ClimateEntityFeature
+from homeassistant.components.climate import FAN_HIGH
 from homeassistant.components.climate import FAN_LOW
 from homeassistant.components.climate import FAN_MEDIUM
-from homeassistant.components.climate import FAN_HIGH
+from homeassistant.components.climate import ClimateEntity
+from homeassistant.components.climate import ClimateEntityFeature
 from homeassistant.components.climate import HVACMode
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_TEMPERATURE
@@ -28,11 +29,9 @@ from .const import DEVICE_TYPE_THERMOSTAT
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .coordinator import SinricProDataUpdateCoordinator
-from .exceptions import (
-    SinricProDeviceOfflineError,
-    SinricProError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProDeviceOfflineError
+from .exceptions import SinricProError
+from .exceptions import SinricProTimeoutError
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -102,7 +101,7 @@ class SinricProThermostat(
 
     _attr_has_entity_name = True
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
-    _attr_hvac_modes = [
+    _attr_hvac_modes: ClassVar[list[HVACMode]] = [
         HVACMode.OFF,
         HVACMode.HEAT,
         HVACMode.COOL,
