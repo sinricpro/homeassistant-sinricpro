@@ -69,9 +69,9 @@ def test_switch_unique_id(
     assert switch.unique_id == expected_id
 
 
-def test_switch_name(switch: SinricProSwitch, mock_device: Device) -> None:
+def test_switch_name(switch: SinricProSwitch) -> None:
     """Test switch name."""
-    assert switch.name == mock_device.name
+    assert switch.name is None
 
 
 def test_switch_is_on_false(

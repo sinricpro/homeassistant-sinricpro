@@ -92,11 +92,9 @@ def test_contact_sensor_unique_id(
     assert contact_sensor.unique_id == expected_id
 
 
-def test_contact_sensor_name(
-    contact_sensor: SinricProContactSensor, mock_contact_device: Device
-) -> None:
+def test_contact_sensor_name(contact_sensor: SinricProContactSensor) -> None:
     """Test contact sensor name."""
-    assert contact_sensor.name == mock_contact_device.name
+    assert contact_sensor.name is None
 
 
 def test_contact_sensor_device_class(
@@ -188,11 +186,9 @@ def test_motion_sensor_unique_id(
     assert motion_sensor.unique_id == expected_id
 
 
-def test_motion_sensor_name(
-    motion_sensor: SinricProMotionSensor, mock_motion_device: Device
-) -> None:
+def test_motion_sensor_name(motion_sensor: SinricProMotionSensor) -> None:
     """Test motion sensor name."""
-    assert motion_sensor.name == mock_motion_device.name
+    assert motion_sensor.name is None
 
 
 def test_motion_sensor_device_class(
