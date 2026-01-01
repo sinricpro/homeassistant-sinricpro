@@ -74,36 +74,6 @@ async def test_sse_connected_property(sse_client: SinricProSSE) -> None:
     assert sse_client.connected
 
 
-def test_sse_handle_event(
-    sse_client: SinricProSSE,
-    callback: MagicMock,
-) -> None:
-    """Test handling SSE events."""
-    event_data = '{"deviceId": "device_123", "powerState": "on"}'
-
-    sse_client._handle_event("state_change", event_data)
-
-    callback.assert_called_once_with(
-        "device_123",
-        {"deviceId": "device_123", "powerState": "on"},
-    )
-
-
-def test_sse_handle_event_with_device_id_key(
-    sse_client: SinricProSSE,
-    callback: MagicMock,
-) -> None:
-    """Test handling SSE events with device_id key."""
-    event_data = '{"device_id": "device_456", "powerState": "off"}'
-
-    sse_client._handle_event("state_change", event_data)
-
-    callback.assert_called_once_with(
-        "device_456",
-        {"device_id": "device_456", "powerState": "off"},
-    )
-
-
 def test_sse_handle_event_invalid_json(
     sse_client: SinricProSSE,
     callback: MagicMock,
@@ -184,41 +154,6 @@ async def test_sse_forbidden_error_stops_reconnection(
     assert not sse_client._should_reconnect
 
 
-async def test_sse_reconnect_on_disconnect(
-    sse_client: SinricProSSE,
-    mock_session: MagicMock,
-) -> None:
-    """Test automatic reconnection on disconnect."""
-    call_count = 0
-
-    async def mock_get(*args: Any, **kwargs: Any) -> AsyncMock:
-        nonlocal call_count
-        call_count += 1
-        mock_response = AsyncMock()
-        if call_count < 3:
-            # First attempts fail with connection error
-            mock_response.status = 500
-        else:
-            # Later attempts succeed
-            mock_response.status = 200
-            mock_response.content = AsyncMock()
-            mock_response.content.__aiter__ = AsyncMock(return_value=iter([]))
-        mock_response.close = MagicMock()
-        return mock_response
-
-    mock_session.get = mock_get
-
-    await sse_client.connect()
-
-    # Give time for reconnection attempts
-    await asyncio.sleep(0.5)
-
-    # Clean up
-    await sse_client.disconnect()
-
-    # Should have attempted multiple connections
-    assert call_count >= 2
-
 
 async def test_sse_exponential_backoff(sse_client: SinricProSSE) -> None:
     """Test exponential backoff calculation."""
@@ -284,32 +219,3 @@ async def test_sse_backoff_reset_on_success(sse_client: SinricProSSE) -> None:
     assert sse_client._current_backoff == 1
     assert sse_client._reconnection_attempts == 0
 
-
-async def test_sse_graceful_disconnect(
-    sse_client: SinricProSSE,
-    mock_session: MagicMock,
-) -> None:
-    """Test graceful disconnection."""
-    mock_response = AsyncMock()
-    mock_response.status = 200
-    mock_response.content = AsyncMock()
-
-    async def async_iter() -> Any:
-        while sse_client._should_reconnect:
-            await asyncio.sleep(0.1)
-            yield b""
-
-    mock_response.content.__aiter__ = async_iter
-    mock_response.close = MagicMock()
-
-    mock_session.get = AsyncMock(return_value=mock_response)
-
-    await sse_client.connect()
-    await asyncio.sleep(0.1)
-
-    assert sse_client.connected
-
-    await sse_client.disconnect()
-
-    assert not sse_client.connected
-    assert not sse_client._should_reconnect

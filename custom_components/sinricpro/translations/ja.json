@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SinricPro",
+        "description": "デバイスを接続するには、SinricPro APIキーを入力してください。",
+        "data": {
+          "api_key": "APIキー"
+        },
+        "data_description": {
+          "api_key": "SinricProダッシュボードからのSinricPro APIキー。"
+        }
+      },
+      "reauth_confirm": {
+        "title": "SinricProの再認証",
+        "description": "SinricPro APIキーが無効になりました。{title}を再接続するには、新しいAPIキーを入力してください。",
+        "data": {
+          "api_key": "APIキー"
+        }
+      },
+      "reconfigure": {
+        "title": "SinricProの再構成",
+        "description": "SinricPro APIキーを更新します。",
+        "data": {
+          "api_key": "APIキー"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "無効なAPIキーです。認証情報を確認してください。",
+      "cannot_connect": "SinricProへの接続に失敗しました。ネットワーク接続を確認してください。",
+      "timeout": "接続がタイムアウトしました。もう一度お試しください。",
+      "rate_limit": "レート制限を超えました。しばらく待ってから再度お試しください。",
+      "unknown": "予期しないエラーが発生しました。もう一度お試しください。"
+    },
+    "abort": {
+      "already_configured": "このAPIキーでSinricProは既に構成されています。",
+      "reauth_successful": "再認証に成功しました。",
+      "reauth_failed": "再認証に失敗しました。",
+      "reconfigure_successful": "再構成に成功しました。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SinricProオプション",
+        "description": "SinricPro統合オプションを構成します。"
+      }
+    }
+  }
+}

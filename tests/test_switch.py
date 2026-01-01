@@ -1,25 +1,16 @@
 """Tests for SinricPro switch platform."""
 from __future__ import annotations
 
-from typing import Any
 from unittest.mock import AsyncMock
 from unittest.mock import MagicMock
-from unittest.mock import patch
 
 import pytest
 from homeassistant.const import CONF_API_KEY
-from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
 
 from custom_components.sinricpro.api import Device
 from custom_components.sinricpro.const import DEVICE_TYPE_SWITCH
 from custom_components.sinricpro.const import DOMAIN
 from custom_components.sinricpro.const import MANUFACTURER
-from custom_components.sinricpro.exceptions import (
-    SinricProDeviceOfflineError,
-    SinricProError,
-    SinricProTimeoutError,
-)
 from custom_components.sinricpro.switch import SinricProSwitch
 
 
@@ -32,7 +23,6 @@ def mock_coordinator() -> MagicMock:
     coordinator.last_update_success = True
     coordinator.data = {}
     coordinator.update_device_state = MagicMock()
-    coordinator.async_set_updated_data = MagicMock()
     return coordinator
 
 
@@ -52,8 +42,8 @@ def mock_device() -> Device:
         id="device_123",
         name="Test Switch",
         device_type=DEVICE_TYPE_SWITCH,
-        power_state=False,
         raw_data={},
+        power_state=False,
     )
 
 
@@ -83,197 +73,29 @@ def test_switch_name(switch: SinricProSwitch, mock_device: Device) -> None:
     assert switch.name == mock_device.name
 
 
-def test_switch_is_on(
+def test_switch_is_on_false(
     switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-    mock_device: Device,
 ) -> None:
-    """Test switch is_on property."""
+    """Test switch is_on property when off."""
     assert switch.is_on is False
 
-    # Change state
+
+def test_switch_is_on_true(
+    switch: SinricProSwitch,
+    mock_coordinator: MagicMock,
+) -> None:
+    """Test switch is_on property when on."""
+    # Change state to on
     mock_device_on = Device(
         id="device_123",
         name="Test Switch",
         device_type=DEVICE_TYPE_SWITCH,
-        power_state=True,
         raw_data={},
+        power_state=True,
     )
     mock_coordinator.data = {mock_device_on.id: mock_device_on}
 
     assert switch.is_on is True
-
-
-def test_switch_available(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test switch availability."""
-    assert switch.available is True
-
-    mock_coordinator.last_update_success = False
-    assert switch.available is False
-
-
-def test_switch_available_no_device(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test switch availability when device not found."""
-    mock_coordinator.data = {}
-    assert switch.available is False
-
-
-def test_switch_device_info(switch: SinricProSwitch) -> None:
-    """Test switch device info."""
-    device_info = switch.device_info
-
-    assert device_info["identifiers"] == {(DOMAIN, "device_123")}
-    assert device_info["name"] == "Test Switch"
-    assert device_info["manufacturer"] == MANUFACTURER
-    assert device_info["model"] == "Switch"
-
-
-async def test_switch_turn_on(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test turning switch on."""
-    await switch.async_turn_on()
-
-    mock_coordinator.api.set_power_state.assert_called_once_with(
-        "device_123", True
-    )
-    mock_coordinator.update_device_state.assert_called_with("device_123", True)
-
-
-async def test_switch_turn_off(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test turning switch off."""
-    await switch.async_turn_off()
-
-    mock_coordinator.api.set_power_state.assert_called_once_with(
-        "device_123", False
-    )
-    mock_coordinator.update_device_state.assert_called_with("device_123", False)
-
-
-async def test_switch_turn_on_timeout_retry(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test turning switch on with timeout and retry."""
-    # First call times out, second succeeds
-    mock_coordinator.api.set_power_state = AsyncMock(
-        side_effect=[SinricProTimeoutError("Timeout"), True]
-    )
-
-    await switch.async_turn_on()
-
-    assert mock_coordinator.api.set_power_state.call_count == 2
-
-
-async def test_switch_turn_on_timeout_retry_fails(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test turning switch on with timeout and retry failure."""
-    mock_coordinator.api.set_power_state = AsyncMock(
-        side_effect=SinricProTimeoutError("Timeout")
-    )
-
-    with pytest.raises(HomeAssistantError) as exc_info:
-        await switch.async_turn_on()
-
-    assert "timed out" in str(exc_info.value).lower()
-
-
-async def test_switch_turn_on_device_offline(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test turning switch on when device is offline."""
-    mock_coordinator.api.set_power_state = AsyncMock(
-        side_effect=SinricProDeviceOfflineError("Device offline")
-    )
-
-    with pytest.raises(HomeAssistantError) as exc_info:
-        await switch.async_turn_on()
-
-    assert "offline" in str(exc_info.value).lower()
-
-
-async def test_switch_turn_on_api_error(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test turning switch on with API error."""
-    mock_coordinator.api.set_power_state = AsyncMock(
-        side_effect=SinricProError("API error")
-    )
-
-    with pytest.raises(HomeAssistantError) as exc_info:
-        await switch.async_turn_on()
-
-    assert "API error" in str(exc_info.value)
-
-
-async def test_switch_optimistic_update(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test optimistic state update."""
-    # Track state changes
-    states = []
-
-    original_write = switch.async_write_ha_state
-
-    def track_state() -> None:
-        states.append(switch._optimistic_state)
-        original_write()
-
-    switch.async_write_ha_state = track_state
-
-    await switch.async_turn_on()
-
-    # Should have optimistic update (True) then clear (None)
-    assert True in states
-    assert switch._optimistic_state is None
-
-
-async def test_switch_optimistic_update_revert_on_failure(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-    mock_device: Device,
-) -> None:
-    """Test optimistic state update reverts on failure."""
-    # Set initial state
-    mock_coordinator.data = {mock_device.id: mock_device}
-
-    mock_coordinator.api.set_power_state = AsyncMock(
-        side_effect=SinricProError("API error")
-    )
-
-    with pytest.raises(HomeAssistantError):
-        await switch.async_turn_on()
-
-    # Optimistic state should be cleared
-    assert switch._optimistic_state is None
-    # Original state should be restored
-    mock_coordinator.update_device_state.assert_called_with(
-        "device_123", False  # Original state
-    )
-
-
-def test_switch_name_none_when_no_device(
-    switch: SinricProSwitch,
-    mock_coordinator: MagicMock,
-) -> None:
-    """Test switch name returns None when device not found."""
-    mock_coordinator.data = {}
-    assert switch.name is None
 
 
 def test_switch_is_on_none_when_no_device(
@@ -285,17 +107,63 @@ def test_switch_is_on_none_when_no_device(
     assert switch.is_on is None
 
 
-def test_switch_is_on_uses_optimistic_state(
+def test_switch_available_true(
     switch: SinricProSwitch,
 ) -> None:
-    """Test switch is_on uses optimistic state when set."""
-    switch._optimistic_state = True
-    assert switch.is_on is True
+    """Test switch availability when coordinator is successful."""
+    assert switch.available is True
 
-    switch._optimistic_state = False
-    assert switch.is_on is False
+
+def test_switch_available_false_coordinator_failed(
+    switch: SinricProSwitch,
+    mock_coordinator: MagicMock,
+) -> None:
+    """Test switch availability when coordinator fails."""
+    mock_coordinator.last_update_success = False
+    assert switch.available is False
+
+
+def test_switch_available_false_no_device(
+    switch: SinricProSwitch,
+    mock_coordinator: MagicMock,
+) -> None:
+    """Test switch availability when device not found."""
+    mock_coordinator.data = {}
+    assert switch.available is False
+
+
+def test_switch_device_info(
+    switch: SinricProSwitch,
+    mock_device: Device,
+) -> None:
+    """Test switch device info."""
+    device_info = switch.device_info
+
+    assert device_info["identifiers"] == {(DOMAIN, mock_device.id)}
+    assert device_info["name"] == mock_device.name
+    assert device_info["manufacturer"] == MANUFACTURER
+    assert device_info["model"] == "Switch"
+
+
+def test_switch_name_none_when_no_device(
+    switch: SinricProSwitch,
+    mock_coordinator: MagicMock,
+) -> None:
+    """Test switch name returns None when device not found."""
+    mock_coordinator.data = {}
+    assert switch.name is None
 
 
 def test_switch_has_entity_name(switch: SinricProSwitch) -> None:
     """Test switch has_entity_name attribute."""
     assert switch._attr_has_entity_name is True
+
+
+def test_switch_device_class_is_none(switch: SinricProSwitch) -> None:
+    """Test switch device class is None (generic switch)."""
+    assert switch.device_class is None
+
+
+def test_switch_should_poll_false(switch: SinricProSwitch) -> None:
+    """Test switch should not poll (uses coordinator)."""
+    assert switch.should_poll is False

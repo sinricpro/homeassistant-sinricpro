@@ -117,16 +117,16 @@ automation:
 
 # Development
 
-1. Start the environment: ./dev.sh start
+1. Start the environment: `./dev.sh start`
 2. Open http://localhost:8123 and create an admin account
 3. Add the integration:
    - Settings → Devices & Services → + Add Integration
    - Search "SinricPro"
    - Enter your API key
-4. Monitor logs:
-./dev.sh logs
-5. After code changes:
-./dev.sh restart
+4. Monitor logs: `./dev.sh logs`
+5. After code changes: `./dev.sh restart`
+
+
 
 ## Troubleshooting
 
@@ -189,12 +189,16 @@ Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTIN
    ```bash
    pytest tests/
    ```
+   ```bash
+   python -m pytest tests/test_switch.py -v --tb=line`
+   ```
 4. Run linting:
    ```bash
    ruff check .
    ruff format --check .
    mypy custom_components/sinricpro
    ```
+
 
 ## License
 

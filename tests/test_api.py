@@ -83,13 +83,13 @@ async def test_api_get_devices(api: SinricProApi, api_url: str) -> None:
             {
                 "id": "device_123",
                 "name": "Living Room Light",
-                "deviceType": "switch",
+                "deviceType": DEVICE_TYPE_SWITCH,
                 "powerState": "on",
             },
             {
                 "id": "device_456",
                 "name": "Kitchen Light",
-                "deviceType": "switch",
+                "deviceType": DEVICE_TYPE_SWITCH,
                 "powerState": "off",
             },
         ]

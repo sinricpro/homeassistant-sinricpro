@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SinricPro",
+        "description": "输入您的SinricPro API密钥以连接您的设备。",
+        "data": {
+          "api_key": "API密钥"
+        },
+        "data_description": {
+          "api_key": "来自SinricPro仪表板的SinricPro API密钥。"
+        }
+      },
+      "reauth_confirm": {
+        "title": "重新验证SinricPro",
+        "description": "您的SinricPro API密钥已失效。请输入新的API密钥以重新连接{title}。",
+        "data": {
+          "api_key": "API密钥"
+        }
+      },
+      "reconfigure": {
+        "title": "重新配置SinricPro",
+        "description": "更新您的SinricPro API密钥。",
+        "data": {
+          "api_key": "API密钥"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "无效的API密钥。请检查您的凭据。",
+      "cannot_connect": "无法连接到SinricPro。请检查您的网络连接。",
+      "timeout": "连接超时。请重试。",
+      "rate_limit": "超出速率限制。请稍等片刻后重试。",
+      "unknown": "发生意外错误。请重试。"
+    },
+    "abort": {
+      "already_configured": "此API密钥已配置SinricPro。",
+      "reauth_successful": "重新验证成功。",
+      "reauth_failed": "重新验证失败。",
+      "reconfigure_successful": "重新配置成功。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SinricPro选项",
+        "description": "配置SinricPro集成选项。"
+      }
+    }
+  }
+}

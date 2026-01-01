@@ -104,12 +104,9 @@ class SinricProDoorbellLastRingSensor(
         return self.coordinator.data.get(self._device_id)
 
     @property
-    def name(self) -> str | None:
+    def name(self) -> str:
         """Return the name of the sensor entity."""
-        device = self._device
-        if device:
-            return f"{device.name} Last Ring"
-        return None
+        return "Last Ring"
 
     @property
     def native_value(self) -> datetime | None:
@@ -181,12 +178,9 @@ class SinricProAirQualityPM1Sensor(
         return self.coordinator.data.get(self._device_id)
 
     @property
-    def name(self) -> str | None:
+    def name(self) -> str:
         """Return the name of the sensor entity."""
-        device = self._device
-        if device:
-            return f"{device.name} PM1.0"
-        return None
+        return "PM1.0"
 
     @property
     def native_value(self) -> float | None:
@@ -253,12 +247,9 @@ class SinricProAirQualityPM25Sensor(
         return self.coordinator.data.get(self._device_id)
 
     @property
-    def name(self) -> str | None:
+    def name(self) -> str:
         """Return the name of the sensor entity."""
-        device = self._device
-        if device:
-            return f"{device.name} PM2.5"
-        return None
+        return "PM2.5"
 
     @property
     def native_value(self) -> float | None:
@@ -325,12 +316,9 @@ class SinricProAirQualityPM10Sensor(
         return self.coordinator.data.get(self._device_id)
 
     @property
-    def name(self) -> str | None:
+    def name(self) -> str:
         """Return the name of the sensor entity."""
-        device = self._device
-        if device:
-            return f"{device.name} PM10"
-        return None
+        return "PM10"
 
     @property
     def native_value(self) -> float | None:
@@ -397,12 +385,9 @@ class SinricProTemperatureSensor(
         return self.coordinator.data.get(self._device_id)
 
     @property
-    def name(self) -> str | None:
+    def name(self) -> str:
         """Return the name of the sensor entity."""
-        device = self._device
-        if device:
-            return f"{device.name} Temperature"
-        return None
+        return "Temperature"
 
     @property
     def native_value(self) -> float | None:
@@ -469,12 +454,9 @@ class SinricProHumiditySensor(
         return self.coordinator.data.get(self._device_id)
 
     @property
-    def name(self) -> str | None:
+    def name(self) -> str:
         """Return the name of the sensor entity."""
-        device = self._device
-        if device:
-            return f"{device.name} Humidity"
-        return None
+        return "Humidity"
 
     @property
     def native_value(self) -> float | None:

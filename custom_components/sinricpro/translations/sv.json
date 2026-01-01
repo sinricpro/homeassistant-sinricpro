@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SinricPro",
+        "description": "Ange din SinricPro API-nyckel för att ansluta dina enheter.",
+        "data": {
+          "api_key": "API-nyckel"
+        },
+        "data_description": {
+          "api_key": "Din SinricPro API-nyckel från SinricPro-instrumentpanelen."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Autentisera SinricPro igen",
+        "description": "Din SinricPro API-nyckel är inte längre giltig. Ange en ny API-nyckel för att återansluta {title}.",
+        "data": {
+          "api_key": "API-nyckel"
+        }
+      },
+      "reconfigure": {
+        "title": "Konfigurera om SinricPro",
+        "description": "Uppdatera din SinricPro API-nyckel.",
+        "data": {
+          "api_key": "API-nyckel"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Ogiltig API-nyckel. Kontrollera dina inloggningsuppgifter.",
+      "cannot_connect": "Kunde inte ansluta till SinricPro. Kontrollera din nätverksanslutning.",
+      "timeout": "Anslutningen tog för lång tid. Försök igen.",
+      "rate_limit": "Hastighetsgränsen överskreds. Vänta en stund och försök igen.",
+      "unknown": "Ett oväntat fel inträffade. Försök igen."
+    },
+    "abort": {
+      "already_configured": "SinricPro är redan konfigurerat med denna API-nyckel.",
+      "reauth_successful": "Återautentisering lyckades.",
+      "reauth_failed": "Återautentisering misslyckades.",
+      "reconfigure_successful": "Omkonfigurering lyckades."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SinricPro-alternativ",
+        "description": "Konfigurera SinricPro-integrationsalternativ."
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SinricPro",
+        "description": "ป้อนคีย์ API ของ SinricPro เพื่อเชื่อมต่ออุปกรณ์ของคุณ",
+        "data": {
+          "api_key": "คีย์ API"
+        },
+        "data_description": {
+          "api_key": "คีย์ API ของ SinricPro จากแดชบอร์ด SinricPro"
+        }
+      },
+      "reauth_confirm": {
+        "title": "ยืนยันตัวตน SinricPro อีกครั้ง",
+        "description": "คีย์ API ของ SinricPro ของคุณไม่ถูกต้องอีกต่อไป โปรดป้อนคีย์ API ใหม่เพื่อเชื่อมต่อ {title} อีกครั้ง",
+        "data": {
+          "api_key": "คีย์ API"
+        }
+      },
+      "reconfigure": {
+        "title": "กำหนดค่า SinricPro ใหม่",
+        "description": "อัปเดตคีย์ API ของ SinricPro",
+        "data": {
+          "api_key": "คีย์ API"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "คีย์ API ไม่ถูกต้อง โปรดตรวจสอบข้อมูลรับรองของคุณ",
+      "cannot_connect": "ไม่สามารถเชื่อมต่อกับ SinricPro โปรดตรวจสอบการเชื่อมต่อเครือข่ายของคุณ",
+      "timeout": "หมดเวลาการเชื่อมต่อ โปรดลองอีกครั้ง",
+      "rate_limit": "เกินขีดจำกัดอัตรา โปรดรอสักครู่และลองอีกครั้ง",
+      "unknown": "เกิดข้อผิดพลาดที่ไม่คาดคิด โปรดลองอีกครั้ง"
+    },
+    "abort": {
+      "already_configured": "SinricPro ได้รับการกำหนดค่าด้วยคีย์ API นี้แล้ว",
+      "reauth_successful": "การยืนยันตัวตนอีกครั้งสำเร็จ",
+      "reauth_failed": "การยืนยันตัวตนอีกครั้งล้มเหลว",
+      "reconfigure_successful": "การกำหนดค่าใหม่สำเร็จ"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "ตัวเลือก SinricPro",
+        "description": "กำหนดค่าตัวเลือกการรวม SinricPro"
+      }
+    }
+  }
+}

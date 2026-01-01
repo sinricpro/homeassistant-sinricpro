@@ -63,31 +63,31 @@ class Device:
     id: str
     name: str
     device_type: str
-    power_state: bool
-    is_online: bool
-    brightness: int | None
-    color: tuple[int, int, int] | None  # RGB tuple (r, g, b)
-    color_temperature: int | None  # Color temperature in Kelvin
-    range_value: int | None  # Range value for blinds (0-100) or fan speed (1-max)
-    last_doorbell_ring: str | None  # ISO timestamp of last doorbell ring
-    max_fan_speed: int | None  # Maximum fan speed levels
-    garage_door_state: str | None  # Garage door state ("Open" or "Close")
-    lock_state: str | None  # Lock state ("LOCKED" or "UNLOCKED")
-    volume: int | None  # Speaker volume (0-100)
-    is_muted: bool | None  # Speaker mute state
-    power_level: int | None  # Dimmable switch power level (0-100)
-    target_temperature: float | None  # Thermostat target temperature
-    thermostat_mode: str | None  # Thermostat mode (COOL/HEAT/AUTO/OFF)
-    temperature: float | None  # Current temperature from thermostat sensor
-    humidity: float | None  # Current humidity from thermostat sensor
-    pm1: float | None  # Air quality PM1.0
-    pm2_5: float | None  # Air quality PM2.5
-    pm10: float | None  # Air quality PM10
-    contact_state: str | None  # Contact sensor state ("open" or "closed")
-    last_contact_detection: str | None  # Contact sensor last detection timestamp
-    last_motion_state: str | None  # Motion sensor state ("detected" or "notDetected")
-    last_motion_detection: str | None  # Motion sensor last detection timestamp
     raw_data: dict[str, Any]
+    power_state: bool = False
+    is_online: bool = True
+    brightness: int | None = None
+    color: tuple[int, int, int] | None = None  # RGB tuple (r, g, b)
+    color_temperature: int | None = None  # Color temperature in Kelvin
+    range_value: int | None = None  # Range value for blinds (0-100) or fan speed (1-max)
+    last_doorbell_ring: str | None = None  # ISO timestamp of last doorbell ring
+    max_fan_speed: int | None = None  # Maximum fan speed levels
+    garage_door_state: str | None = None  # Garage door state ("Open" or "Close")
+    lock_state: str | None = None  # Lock state ("LOCKED" or "UNLOCKED")
+    volume: int | None = None  # Speaker volume (0-100)
+    is_muted: bool | None = None  # Speaker mute state
+    power_level: int | None = None  # Dimmable switch power level (0-100)
+    target_temperature: float | None = None  # Thermostat target temperature
+    thermostat_mode: str | None = None  # Thermostat mode (COOL/HEAT/AUTO/OFF)
+    temperature: float | None = None  # Current temperature from thermostat sensor
+    humidity: float | None = None  # Current humidity from thermostat sensor
+    pm1: float | None = None  # Air quality PM1.0
+    pm2_5: float | None = None  # Air quality PM2.5
+    pm10: float | None = None  # Air quality PM10
+    contact_state: str | None = None  # Contact sensor state ("open" or "closed")
+    last_contact_detection: str | None = None  # Contact sensor last detection timestamp
+    last_motion_state: str | None = None  # Motion sensor state ("detected" or "notDetected")
+    last_motion_detection: str | None = None  # Motion sensor last detection timestamp
 
     @classmethod
     def from_api_response(cls, data: dict[str, Any]) -> Device:
@@ -101,7 +101,11 @@ class Device:
         """
         power_state_str = data.get("powerState", "off")
         power_state = power_state_str.lower() == "on"
-        device_type = data["product"]["code"]
+        # Handle both API response formats: product.code or deviceType
+        if "product" in data:
+            device_type = data["product"]["code"]
+        else:
+            device_type = data.get("deviceType", "unknown")
         is_online = data.get("isOnline", False)
         # Brightness defaults to 100 for lights, None for other devices
         brightness = data.get("brightness", 100)

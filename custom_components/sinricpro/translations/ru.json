@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SinricPro",
+        "description": "Введите ваш API-ключ SinricPro для подключения устройств.",
+        "data": {
+          "api_key": "API-ключ"
+        },
+        "data_description": {
+          "api_key": "Ваш API-ключ SinricPro из панели управления SinricPro."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Повторная аутентификация SinricPro",
+        "description": "Ваш API-ключ SinricPro больше не действителен. Введите новый API-ключ для повторного подключения {title}.",
+        "data": {
+          "api_key": "API-ключ"
+        }
+      },
+      "reconfigure": {
+        "title": "Перенастроить SinricPro",
+        "description": "Обновите ваш API-ключ SinricPro.",
+        "data": {
+          "api_key": "API-ключ"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Недействительный API-ключ. Проверьте ваши учетные данные.",
+      "cannot_connect": "Не удалось подключиться к SinricPro. Проверьте подключение к сети.",
+      "timeout": "Превышено время ожидания подключения. Попробуйте снова.",
+      "rate_limit": "Превышен лимит запросов. Подождите немного и попробуйте снова.",
+      "unknown": "Произошла непредвиденная ошибка. Попробуйте снова."
+    },
+    "abort": {
+      "already_configured": "SinricPro уже настроен с этим API-ключом.",
+      "reauth_successful": "Повторная аутентификация выполнена успешно.",
+      "reauth_failed": "Повторная аутентификация не удалась.",
+      "reconfigure_successful": "Перенастройка выполнена успешно."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Параметры SinricPro",
+        "description": "Настройте параметры интеграции SinricPro."
+      }
+    }
+  }
+}

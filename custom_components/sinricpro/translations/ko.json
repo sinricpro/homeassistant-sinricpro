@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SinricPro",
+        "description": "기기를 연결하려면 SinricPro API 키를 입력하세요.",
+        "data": {
+          "api_key": "API 키"
+        },
+        "data_description": {
+          "api_key": "SinricPro 대시보드의 SinricPro API 키입니다."
+        }
+      },
+      "reauth_confirm": {
+        "title": "SinricPro 재인증",
+        "description": "SinricPro API 키가 더 이상 유효하지 않습니다. {title}을(를) 다시 연결하려면 새 API 키를 입력하세요.",
+        "data": {
+          "api_key": "API 키"
+        }
+      },
+      "reconfigure": {
+        "title": "SinricPro 재구성",
+        "description": "SinricPro API 키를 업데이트하세요.",
+        "data": {
+          "api_key": "API 키"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "잘못된 API 키입니다. 자격 증명을 확인하세요.",
+      "cannot_connect": "SinricPro에 연결할 수 없습니다. 네트워크 연결을 확인하세요.",
+      "timeout": "연결 시간이 초과되었습니다. 다시 시도하세요.",
+      "rate_limit": "속도 제한을 초과했습니다. 잠시 후 다시 시도하세요.",
+      "unknown": "예기치 않은 오류가 발생했습니다. 다시 시도하세요."
+    },
+    "abort": {
+      "already_configured": "이 API 키로 SinricPro가 이미 구성되어 있습니다.",
+      "reauth_successful": "재인증에 성공했습니다.",
+      "reauth_failed": "재인증에 실패했습니다.",
+      "reconfigure_successful": "재구성에 성공했습니다."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SinricPro 옵션",
+        "description": "SinricPro 통합 옵션을 구성합니다."
+      }
+    }
+  }
+}
