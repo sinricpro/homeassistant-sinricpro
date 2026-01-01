@@ -1,4 +1,5 @@
 """Tests for SinricPro API client."""
+
 from __future__ import annotations
 
 import aiohttp
@@ -37,9 +38,7 @@ def api(session: aiohttp.ClientSession) -> SinricProApi:
     return SinricProApi("test_api_key", session)
 
 
-async def test_api_validate_key_success(
-    api: SinricProApi, api_url: str
-) -> None:
+async def test_api_validate_key_success(api: SinricProApi, api_url: str) -> None:
     """Test successful API key validation."""
     with aioresponses() as m:
         m.get(api_url, payload={"devices": []})
@@ -48,9 +47,7 @@ async def test_api_validate_key_success(
         assert result is True
 
 
-async def test_api_validate_key_invalid(
-    api: SinricProApi, api_url: str
-) -> None:
+async def test_api_validate_key_invalid(api: SinricProApi, api_url: str) -> None:
     """Test invalid API key validation."""
     with aioresponses() as m:
         m.get(api_url, status=401)
@@ -59,9 +56,7 @@ async def test_api_validate_key_invalid(
             await api.validate_api_key()
 
 
-async def test_api_validate_key_forbidden(
-    api: SinricProApi, api_url: str
-) -> None:
+async def test_api_validate_key_forbidden(api: SinricProApi, api_url: str) -> None:
     """Test forbidden API key validation."""
     with aioresponses() as m:
         m.get(api_url, status=403)
@@ -156,9 +151,7 @@ async def test_api_rate_limit(api: SinricProApi, api_url: str) -> None:
         assert exc_info.value.retry_after == 60
 
 
-async def test_api_rate_limit_no_retry_header(
-    api: SinricProApi, api_url: str
-) -> None:
+async def test_api_rate_limit_no_retry_header(api: SinricProApi, api_url: str) -> None:
     """Test rate limit error without Retry-After header."""
     with aioresponses() as m:
         m.get(api_url, status=429)

@@ -1,4 +1,5 @@
 """Tests for SinricPro data coordinator."""
+
 from __future__ import annotations
 
 from unittest.mock import AsyncMock
@@ -112,9 +113,7 @@ async def test_coordinator_auth_error_triggers_reauth(
     mock_api: AsyncMock,
 ) -> None:
     """Test authentication error triggers reauthentication."""
-    mock_api.get_devices.side_effect = SinricProAuthenticationError(
-        "Invalid API key"
-    )
+    mock_api.get_devices.side_effect = SinricProAuthenticationError("Invalid API key")
 
     with pytest.raises(ConfigEntryAuthFailed):
         await coordinator._async_update_data()
@@ -125,9 +124,7 @@ async def test_coordinator_connection_error(
     mock_api: AsyncMock,
 ) -> None:
     """Test connection error handling."""
-    mock_api.get_devices.side_effect = SinricProConnectionError(
-        "Connection failed"
-    )
+    mock_api.get_devices.side_effect = SinricProConnectionError("Connection failed")
 
     with pytest.raises(UpdateFailed):
         await coordinator._async_update_data()
@@ -138,9 +135,7 @@ async def test_coordinator_timeout_error(
     mock_api: AsyncMock,
 ) -> None:
     """Test timeout error handling."""
-    mock_api.get_devices.side_effect = SinricProTimeoutError(
-        "Request timed out"
-    )
+    mock_api.get_devices.side_effect = SinricProTimeoutError("Request timed out")
 
     with pytest.raises(UpdateFailed):
         await coordinator._async_update_data()
@@ -316,9 +311,7 @@ async def test_coordinator_setup(
     coordinator: SinricProDataUpdateCoordinator,
 ) -> None:
     """Test coordinator setup."""
-    with patch(
-        "custom_components.sinricpro.coordinator.SinricProSSE"
-    ) as mock_sse_class:
+    with patch("custom_components.sinricpro.coordinator.SinricProSSE") as mock_sse_class:
         mock_sse = mock_sse_class.return_value
         mock_sse.connect = AsyncMock()
 

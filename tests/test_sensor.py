@@ -1,4 +1,5 @@
 """Tests for SinricPro sensor platform."""
+
 from __future__ import annotations
 
 from unittest.mock import MagicMock
@@ -403,9 +404,7 @@ def humidity_sensor(
 ) -> SinricProHumiditySensor:
     """Create humidity sensor entity."""
     mock_coordinator.data = {mock_temperature_device.id: mock_temperature_device}
-    return SinricProHumiditySensor(
-        mock_coordinator, mock_temperature_device.id, mock_config_entry
-    )
+    return SinricProHumiditySensor(mock_coordinator, mock_temperature_device.id, mock_config_entry)
 
 
 def test_humidity_sensor_unique_id(

@@ -1,4 +1,5 @@
 """Tests for SinricPro SSE client."""
+
 from __future__ import annotations
 
 import asyncio
@@ -151,7 +152,6 @@ async def test_sse_forbidden_error_stops_reconnection(
     assert not sse_client._should_reconnect
 
 
-
 async def test_sse_exponential_backoff(sse_client: SinricProSSE) -> None:
     """Test exponential backoff calculation."""
     # Initial backoff
@@ -215,4 +215,3 @@ async def test_sse_backoff_reset_on_success(sse_client: SinricProSSE) -> None:
 
     assert sse_client._current_backoff == 1
     assert sse_client._reconnection_attempts == 0
-

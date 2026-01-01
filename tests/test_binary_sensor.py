@@ -1,4 +1,5 @@
 """Tests for SinricPro binary_sensor platform."""
+
 from __future__ import annotations
 
 from unittest.mock import MagicMock
@@ -66,9 +67,7 @@ def contact_sensor(
 ) -> SinricProContactSensor:
     """Create contact sensor entity."""
     mock_coordinator.data = {mock_contact_device.id: mock_contact_device}
-    return SinricProContactSensor(
-        mock_coordinator, mock_contact_device.id, mock_config_entry
-    )
+    return SinricProContactSensor(mock_coordinator, mock_contact_device.id, mock_config_entry)
 
 
 @pytest.fixture
@@ -79,9 +78,7 @@ def motion_sensor(
 ) -> SinricProMotionSensor:
     """Create motion sensor entity."""
     mock_coordinator.data = {mock_motion_device.id: mock_motion_device}
-    return SinricProMotionSensor(
-        mock_coordinator, mock_motion_device.id, mock_config_entry
-    )
+    return SinricProMotionSensor(mock_coordinator, mock_motion_device.id, mock_config_entry)
 
 
 # Contact Sensor Tests
@@ -180,8 +177,6 @@ def test_contact_sensor_device_info(
     assert device_info["model"] == "Contact Sensor"
 
 
-
-
 # Motion Sensor Tests
 def test_motion_sensor_unique_id(
     motion_sensor: SinricProMotionSensor,
@@ -276,5 +271,3 @@ def test_motion_sensor_device_info(
     assert device_info["name"] == "Test Motion Sensor"
     assert device_info["manufacturer"] == MANUFACTURER
     assert device_info["model"] == "Motion Sensor"
-
-
