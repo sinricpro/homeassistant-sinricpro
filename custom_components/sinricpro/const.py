@@ -8,15 +8,11 @@ from typing import Final
 DOMAIN: Final = "sinricpro"
 
 # API endpoints
-# Production URLs (commented out for local development)
+# Production URLs
 API_BASE_URL: Final = "https://api.sinric.pro"
-SSE_URL: Final = "https://portal.sinric.pro/sse/stream"
+SSE_URL: Final = "https://sse.sinric.pro/sse/stream"
 API_DEVICES_ENDPOINT: Final = "/api/v1/devices"
 API_ACTION_ENDPOINT: Final = "/api/v1/devices/{device_id}/action"
-
-# Local development URLs
-# API_BASE_URL: Final = "http://192.168.1.134:5002"
-# SSE_URL: Final = "http://192.168.1.134:6004/sse/stream"
 
 # API headers
 HEADER_API_KEY: Final = "x-sinric-api-key"
