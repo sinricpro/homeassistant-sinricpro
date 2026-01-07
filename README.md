@@ -1,11 +1,8 @@
 # SinricPro Home Assistant Integration
 
 [![CI](https://github.com/sinricpro/homeassistant-sinricpro/actions/workflows/ci.yml/badge.svg)](https://github.com/sinricpro/homeassistant-sinricpro/actions/workflows/ci.yml)
-[![HACS](https://github.com/sinricpro/homeassistant-sinricpro/actions/workflows/hacs.yml/badge.svg)](https://github.com/sinricpro/homeassistant-sinricpro/actions/workflows/hacs.yml)
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-### Still under development!
 
 A Home Assistant custom integration for [SinricPro](https://sinric.pro) that allows you to control your SinricPro devices from Home Assistant.
 
