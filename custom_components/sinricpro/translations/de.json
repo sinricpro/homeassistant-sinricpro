@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SinricPro",
+        "description": "Geben Sie Ihren SinricPro API-Schlüssel ein, um Ihre Geräte zu verbinden.",
+        "data": {
+          "api_key": "API-Schlüssel"
+        },
+        "data_description": {
+          "api_key": "Ihr SinricPro API-Schlüssel aus dem SinricPro Dashboard."
+        }
+      },
+      "reauth_confirm": {
+        "title": "SinricPro erneut authentifizieren",
+        "description": "Ihr SinricPro API-Schlüssel ist nicht mehr gültig. Bitte geben Sie einen neuen API-Schlüssel ein, um {title} erneut zu verbinden.",
+        "data": {
+          "api_key": "API-Schlüssel"
+        }
+      },
+      "reconfigure": {
+        "title": "SinricPro neu konfigurieren",
+        "description": "Aktualisieren Sie Ihren SinricPro API-Schlüssel.",
+        "data": {
+          "api_key": "API-Schlüssel"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Ungültiger API-Schlüssel. Bitte überprüfen Sie Ihre Anmeldedaten.",
+      "cannot_connect": "Verbindung zu SinricPro fehlgeschlagen. Bitte überprüfen Sie Ihre Netzwerkverbindung.",
+      "timeout": "Verbindungs-Timeout. Bitte versuchen Sie es erneut.",
+      "rate_limit": "Ratenlimit überschritten. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+      "unknown": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "abort": {
+      "already_configured": "SinricPro ist bereits mit diesem API-Schlüssel konfiguriert.",
+      "reauth_successful": "Erneute Authentifizierung erfolgreich.",
+      "reauth_failed": "Erneute Authentifizierung fehlgeschlagen.",
+      "reconfigure_successful": "Neukonfiguration erfolgreich."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SinricPro-Optionen",
+        "description": "SinricPro-Integrationsoptionen konfigurieren."
+      }
+    }
+  }
+}

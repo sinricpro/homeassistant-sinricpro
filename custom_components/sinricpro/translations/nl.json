@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SinricPro",
+        "description": "Voer uw SinricPro API-sleutel in om uw apparaten te verbinden.",
+        "data": {
+          "api_key": "API-sleutel"
+        },
+        "data_description": {
+          "api_key": "Uw SinricPro API-sleutel van het SinricPro dashboard."
+        }
+      },
+      "reauth_confirm": {
+        "title": "SinricPro opnieuw authenticeren",
+        "description": "Uw SinricPro API-sleutel is niet meer geldig. Voer een nieuwe API-sleutel in om {title} opnieuw te verbinden.",
+        "data": {
+          "api_key": "API-sleutel"
+        }
+      },
+      "reconfigure": {
+        "title": "SinricPro opnieuw configureren",
+        "description": "Update uw SinricPro API-sleutel.",
+        "data": {
+          "api_key": "API-sleutel"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Ongeldige API-sleutel. Controleer uw inloggegevens.",
+      "cannot_connect": "Kan geen verbinding maken met SinricPro. Controleer uw netwerkverbinding.",
+      "timeout": "Verbinding time-out. Probeer het opnieuw.",
+      "rate_limit": "Snelheidslimiet overschreden. Wacht even en probeer het opnieuw.",
+      "unknown": "Er is een onverwachte fout opgetreden. Probeer het opnieuw."
+    },
+    "abort": {
+      "already_configured": "SinricPro is al geconfigureerd met deze API-sleutel.",
+      "reauth_successful": "Herauthenticatie geslaagd.",
+      "reauth_failed": "Herauthenticatie mislukt.",
+      "reconfigure_successful": "Herconfiguratie geslaagd."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "SinricPro-opties",
+        "description": "Configureer SinricPro-integratie-opties."
+      }
+    }
+  }
+}

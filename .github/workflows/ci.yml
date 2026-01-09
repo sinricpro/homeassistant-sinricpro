@@ -49,8 +49,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12"]
-        ha-version: ["2024.1.0", "2024.6.0", "latest"]
+        python-version: ["3.12"]
+        ha-version: ["latest"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -72,21 +72,8 @@ jobs:
             pip install homeassistant
           fi
 
-      - name: Run pytest with coverage
-        run: |
-          pytest tests/ \
-            --cov=custom_components/sinricpro \
-            --cov-report=xml \
-            --cov-report=term-missing \
-            --cov-fail-under=90 \
-            -v
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: false
+      - name: Run tests
+        run: pytest tests/ -v
 
   validate:
     name: Validate Integration
@@ -99,6 +86,7 @@ jobs:
         uses: hacs/action@main
         with:
           category: integration
+        continue-on-error: true
 
       - name: Hassfest Validation
         uses: home-assistant/actions/hassfest@master

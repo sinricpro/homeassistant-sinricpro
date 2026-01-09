@@ -1,15 +1,15 @@
 """Cover platform for SinricPro (Blinds and Garage Doors)."""
+
 from __future__ import annotations
 
 import logging
 from typing import Any
+from typing import cast
 
-from homeassistant.components.cover import (
-    ATTR_POSITION,
-    CoverDeviceClass,
-    CoverEntity,
-    CoverEntityFeature,
-)
+from homeassistant.components.cover import ATTR_POSITION
+from homeassistant.components.cover import CoverDeviceClass
+from homeassistant.components.cover import CoverEntity
+from homeassistant.components.cover import CoverEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import CALLBACK_TYPE
 from homeassistant.core import HomeAssistant
@@ -28,11 +28,9 @@ from .const import GARAGE_DOOR_MODE_CLOSE
 from .const import GARAGE_DOOR_MODE_OPEN
 from .const import MANUFACTURER
 from .coordinator import SinricProDataUpdateCoordinator
-from .exceptions import (
-    SinricProDeviceOfflineError,
-    SinricProError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProDeviceOfflineError
+from .exceptions import SinricProError
+from .exceptions import SinricProTimeoutError
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -73,9 +71,7 @@ class SinricProCover(CoordinatorEntity[SinricProDataUpdateCoordinator], CoverEnt
     _attr_has_entity_name = True
     _attr_device_class = CoverDeviceClass.BLIND
     _attr_supported_features = (
-        CoverEntityFeature.OPEN
-        | CoverEntityFeature.CLOSE
-        | CoverEntityFeature.SET_POSITION
+        CoverEntityFeature.OPEN | CoverEntityFeature.CLOSE | CoverEntityFeature.SET_POSITION
     )
 
     def __init__(
@@ -103,14 +99,11 @@ class SinricProCover(CoordinatorEntity[SinricProDataUpdateCoordinator], CoverEnt
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:
         """Return the name of the cover."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property
@@ -158,11 +151,7 @@ class SinricProCover(CoordinatorEntity[SinricProDataUpdateCoordinator], CoverEnt
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -296,14 +285,10 @@ class SinricProCover(CoordinatorEntity[SinricProDataUpdateCoordinator], CoverEnt
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err
 
 
-class SinricProGarageDoor(
-    CoordinatorEntity[SinricProDataUpdateCoordinator], CoverEntity
-):
+class SinricProGarageDoor(CoordinatorEntity[SinricProDataUpdateCoordinator], CoverEntity):
     """Representation of a SinricPro garage door."""
 
     _attr_has_entity_name = True
@@ -335,14 +320,11 @@ class SinricProGarageDoor(
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:
         """Return the name of the garage door."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property
@@ -375,11 +357,7 @@ class SinricProGarageDoor(
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -500,6 +478,4 @@ class SinricProGarageDoor(
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err

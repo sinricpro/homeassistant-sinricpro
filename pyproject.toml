@@ -54,6 +54,9 @@ ignore = [
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]  # Allow assert in tests
+
 [tool.ruff.lint.isort]
 force-single-line = true
 known-first-party = ["custom_components.sinricpro"]

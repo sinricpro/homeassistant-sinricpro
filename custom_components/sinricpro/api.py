@@ -1,4 +1,5 @@
 """SinricPro API client."""
+
 from __future__ import annotations
 
 import asyncio
@@ -9,46 +10,43 @@ import uuid
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import cast
 
 import aiohttp
 
-from .const import (
-    ACTION_DOORBELL_PRESS,
-    ACTION_MEDIA_CONTROL,
-    ACTION_SET_BRIGHTNESS,
-    ACTION_SET_COLOR,
-    ACTION_SET_COLOR_TEMPERATURE,
-    ACTION_SET_LOCK_STATE,
-    ACTION_SET_MODE,
-    ACTION_SET_MUTE,
-    ACTION_SET_POWER_LEVEL,
-    ACTION_SET_POWER_STATE,
-    ACTION_SET_RANGE_VALUE,
-    ACTION_SET_THERMOSTAT_MODE,
-    ACTION_SET_VOLUME,
-    ACTION_SKIP_CHANNELS,
-    ACTION_TARGET_TEMPERATURE,
-    ACTION_TYPE_EVENT,
-    ACTION_TYPE_REQUEST,
-    API_ACTION_ENDPOINT,
-    API_BASE_URL,
-    API_DEVICES_ENDPOINT,
-    API_MAX_RETRIES,
-    API_RETRY_BACKOFF,
-    CLIENT_ID,
-    DEFAULT_TIMEOUT,
-    HEADER_API_KEY,
-    POWER_STATE_OFF,
-    POWER_STATE_ON,
-)
-from .exceptions import (
-    SinricProApiError,
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProDeviceNotFoundError,
-    SinricProRateLimitError,
-    SinricProTimeoutError,
-)
+from .const import ACTION_DOORBELL_PRESS
+from .const import ACTION_MEDIA_CONTROL
+from .const import ACTION_SET_BRIGHTNESS
+from .const import ACTION_SET_COLOR
+from .const import ACTION_SET_COLOR_TEMPERATURE
+from .const import ACTION_SET_LOCK_STATE
+from .const import ACTION_SET_MODE
+from .const import ACTION_SET_MUTE
+from .const import ACTION_SET_POWER_LEVEL
+from .const import ACTION_SET_POWER_STATE
+from .const import ACTION_SET_RANGE_VALUE
+from .const import ACTION_SET_THERMOSTAT_MODE
+from .const import ACTION_SET_VOLUME
+from .const import ACTION_SKIP_CHANNELS
+from .const import ACTION_TARGET_TEMPERATURE
+from .const import ACTION_TYPE_EVENT
+from .const import ACTION_TYPE_REQUEST
+from .const import API_ACTION_ENDPOINT
+from .const import API_BASE_URL
+from .const import API_DEVICES_ENDPOINT
+from .const import API_MAX_RETRIES
+from .const import API_RETRY_BACKOFF
+from .const import CLIENT_ID
+from .const import DEFAULT_TIMEOUT
+from .const import HEADER_API_KEY
+from .const import POWER_STATE_OFF
+from .const import POWER_STATE_ON
+from .exceptions import SinricProApiError
+from .exceptions import SinricProAuthenticationError
+from .exceptions import SinricProConnectionError
+from .exceptions import SinricProDeviceNotFoundError
+from .exceptions import SinricProRateLimitError
+from .exceptions import SinricProTimeoutError
 
 if TYPE_CHECKING:
     from aiohttp import ClientSession
@@ -63,31 +61,31 @@ class Device:
     id: str
     name: str
     device_type: str
-    power_state: bool
-    is_online: bool
-    brightness: int | None
-    color: tuple[int, int, int] | None  # RGB tuple (r, g, b)
-    color_temperature: int | None  # Color temperature in Kelvin
-    range_value: int | None  # Range value for blinds (0-100) or fan speed (1-max)
-    last_doorbell_ring: str | None  # ISO timestamp of last doorbell ring
-    max_fan_speed: int | None  # Maximum fan speed levels
-    garage_door_state: str | None  # Garage door state ("Open" or "Close")
-    lock_state: str | None  # Lock state ("LOCKED" or "UNLOCKED")
-    volume: int | None  # Speaker volume (0-100)
-    is_muted: bool | None  # Speaker mute state
-    power_level: int | None  # Dimmable switch power level (0-100)
-    target_temperature: float | None  # Thermostat target temperature
-    thermostat_mode: str | None  # Thermostat mode (COOL/HEAT/AUTO/OFF)
-    temperature: float | None  # Current temperature from thermostat sensor
-    humidity: float | None  # Current humidity from thermostat sensor
-    pm1: float | None  # Air quality PM1.0
-    pm2_5: float | None  # Air quality PM2.5
-    pm10: float | None  # Air quality PM10
-    contact_state: str | None  # Contact sensor state ("open" or "closed")
-    last_contact_detection: str | None  # Contact sensor last detection timestamp
-    last_motion_state: str | None  # Motion sensor state ("detected" or "notDetected")
-    last_motion_detection: str | None  # Motion sensor last detection timestamp
     raw_data: dict[str, Any]
+    power_state: bool = False
+    is_online: bool = True
+    brightness: int | None = None
+    color: tuple[int, int, int] | None = None  # RGB tuple (r, g, b)
+    color_temperature: int | None = None  # Color temperature in Kelvin
+    range_value: int | None = None  # Range value for blinds (0-100) or fan speed (1-max)
+    last_doorbell_ring: str | None = None  # ISO timestamp of last doorbell ring
+    max_fan_speed: int | None = None  # Maximum fan speed levels
+    garage_door_state: str | None = None  # Garage door state ("Open" or "Close")
+    lock_state: str | None = None  # Lock state ("LOCKED" or "UNLOCKED")
+    volume: int | None = None  # Speaker volume (0-100)
+    is_muted: bool | None = None  # Speaker mute state
+    power_level: int | None = None  # Dimmable switch power level (0-100)
+    target_temperature: float | None = None  # Thermostat target temperature
+    thermostat_mode: str | None = None  # Thermostat mode (COOL/HEAT/AUTO/OFF)
+    temperature: float | None = None  # Current temperature from thermostat sensor
+    humidity: float | None = None  # Current humidity from thermostat sensor
+    pm1: float | None = None  # Air quality PM1.0
+    pm2_5: float | None = None  # Air quality PM2.5
+    pm10: float | None = None  # Air quality PM10
+    contact_state: str | None = None  # Contact sensor state ("open" or "closed")
+    last_contact_detection: str | None = None  # Contact sensor last detection timestamp
+    last_motion_state: str | None = None  # Motion sensor state ("detected" or "notDetected")
+    last_motion_detection: str | None = None  # Motion sensor last detection timestamp
 
     @classmethod
     def from_api_response(cls, data: dict[str, Any]) -> Device:
@@ -101,7 +99,11 @@ class Device:
         """
         power_state_str = data.get("powerState", "off")
         power_state = power_state_str.lower() == "on"
-        device_type = data["product"]["code"]
+        # Handle both API response formats: product.code or deviceType
+        if "product" in data:
+            device_type = data["product"]["code"]
+        else:
+            device_type = data.get("deviceType", "unknown")
         is_online = data.get("isOnline", False)
         # Brightness defaults to 100 for lights, None for other devices
         brightness = data.get("brightness", 100)
@@ -247,7 +249,7 @@ class SinricProApi:
                         response, method, endpoint, json_data, retry_count
                     )
 
-        except asyncio.TimeoutError as err:
+        except TimeoutError as err:
             if retry_count < API_MAX_RETRIES:
                 _LOGGER.debug(
                     "Request timeout for %s, retrying (%d/%d)",
@@ -271,9 +273,7 @@ class SinricProApi:
                 )
                 await asyncio.sleep(API_RETRY_BACKOFF * (retry_count + 1))
                 return await self._request(method, endpoint, json_data, retry_count + 1)
-            raise SinricProConnectionError(
-                f"Failed to connect to SinricPro API: {err}"
-            ) from err
+            raise SinricProConnectionError(f"Failed to connect to SinricPro API: {err}") from err
 
     async def _handle_response(
         self,
@@ -301,14 +301,10 @@ class SinricProApi:
         status = response.status
 
         if status in (401, 403):
-            raise SinricProAuthenticationError(
-                "Invalid or expired API key"
-            )
+            raise SinricProAuthenticationError("Invalid or expired API key")
 
         if status == 404:
-            raise SinricProDeviceNotFoundError(
-                f"Device not found: {endpoint}"
-            )
+            raise SinricProDeviceNotFoundError(f"Device not found: {endpoint}")
 
         if status == 429:
             retry_after = response.headers.get("Retry-After")
@@ -329,9 +325,7 @@ class SinricProApi:
                 )
                 await asyncio.sleep(API_RETRY_BACKOFF * (retry_count + 1))
                 return await self._request(method, endpoint, json_data, retry_count + 1)
-            raise SinricProTimeoutError(
-                f"Request timed out with status {status}"
-            )
+            raise SinricProTimeoutError(f"Request timed out with status {status}")
 
         if status in (500, 502, 503):
             if retry_count < API_MAX_RETRIES:
@@ -356,7 +350,7 @@ class SinricProApi:
             )
 
         try:
-            return await response.json()
+            return cast(dict[str, Any], await response.json())
         except (aiohttp.ContentTypeError, ValueError) as err:
             _LOGGER.warning("Failed to parse JSON response: %s", err)
             return {}
@@ -488,9 +482,7 @@ class SinricProApi:
         )
         return True
 
-    async def set_color(
-        self, device_id: str, red: int, green: int, blue: int
-    ) -> bool:
+    async def set_color(self, device_id: str, red: int, green: int, blue: int) -> bool:
         """Set the color of a light device.
 
         Args:
@@ -966,9 +958,7 @@ class SinricProApi:
         )
         return True
 
-    async def set_target_temperature(
-        self, device_id: str, temperature: float
-    ) -> bool:
+    async def set_target_temperature(self, device_id: str, temperature: float) -> bool:
         """Set the target temperature of a thermostat device.
 
         Args:

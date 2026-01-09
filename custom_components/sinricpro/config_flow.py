@@ -1,13 +1,14 @@
 """Config flow for SinricPro integration."""
+
 from __future__ import annotations
 
 import logging
 from typing import Any
 
-import voluptuous as vol
+import voluptuous as vol  # type: ignore[import-untyped]
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.config_entries import ConfigFlow
-from homeassistant.config_entries import ConfigFlowResult
+from homeassistant.config_entries import ConfigFlowResult  # type: ignore[attr-defined]
 from homeassistant.config_entries import OptionsFlow
 from homeassistant.const import CONF_API_KEY
 from homeassistant.core import callback
@@ -15,12 +16,10 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import SinricProApi
 from .const import DOMAIN
-from .exceptions import (
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProRateLimitError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProAuthenticationError
+from .exceptions import SinricProConnectionError
+from .exceptions import SinricProRateLimitError
+from .exceptions import SinricProTimeoutError
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,9 +45,7 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
         """Get the options flow for this handler."""
         return SinricProOptionsFlow(config_entry)
 
-    async def async_step_user(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle the initial step.
 
         Args:
@@ -82,9 +79,7 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_reauth(
-        self, entry_data: dict[str, Any]
-    ) -> ConfigFlowResult:
+    async def async_step_reauth(self, entry_data: dict[str, Any]) -> ConfigFlowResult:
         """Handle reauthentication.
 
         Args:
@@ -93,9 +88,7 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
         Returns:
             ConfigFlowResult for the reauth confirm step.
         """
-        self._reauth_entry = self.hass.config_entries.async_get_entry(
-            self.context["entry_id"]
-        )
+        self._reauth_entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
@@ -124,9 +117,7 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
                         self._reauth_entry,
                         data={CONF_API_KEY: api_key},
                     )
-                    await self.hass.config_entries.async_reload(
-                        self._reauth_entry.entry_id
-                    )
+                    await self.hass.config_entries.async_reload(self._reauth_entry.entry_id)
                     return self.async_abort(reason="reauth_successful")
                 return self.async_abort(reason="reauth_failed")
 
@@ -218,9 +209,7 @@ class SinricProOptionsFlow(OptionsFlow):
         """
         self.config_entry = config_entry
 
-    async def async_step_init(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Manage the options.
 
         Args:

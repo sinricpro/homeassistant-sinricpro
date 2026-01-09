@@ -1,8 +1,10 @@
 """Switch platform for SinricPro."""
+
 from __future__ import annotations
 
 import logging
 from typing import Any
+from typing import cast
 
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
@@ -20,11 +22,9 @@ from .const import DEVICE_TYPE_SWITCH
 from .const import DOMAIN
 from .const import MANUFACTURER
 from .coordinator import SinricProDataUpdateCoordinator
-from .exceptions import (
-    SinricProDeviceOfflineError,
-    SinricProError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProDeviceOfflineError
+from .exceptions import SinricProError
+from .exceptions import SinricProTimeoutError
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -87,14 +87,11 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
         """Get the device from coordinator data."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get(self._device_id)
+        return cast(Device | None, self.coordinator.data.get(self._device_id))
 
     @property
     def name(self) -> str | None:
         """Return the name of the switch."""
-        device = self._device
-        if device:
-            return device.name
         return None
 
     @property
@@ -113,11 +110,7 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
     def available(self) -> bool:
         """Return True if entity is available."""
         device = self._device
-        return (
-            self.coordinator.last_update_success
-            and device is not None
-            and device.is_online
-        )
+        return self.coordinator.last_update_success and device is not None and device.is_online
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -233,6 +226,4 @@ class SinricProSwitch(CoordinatorEntity[SinricProDataUpdateCoordinator], SwitchE
         except SinricProError as err:
             self._clear_pending_state()
             self.async_write_ha_state()
-            raise HomeAssistantError(
-                f"Failed to control {self.name}: {err}"
-            ) from err
+            raise HomeAssistantError(f"Failed to control {self.name}: {err}") from err

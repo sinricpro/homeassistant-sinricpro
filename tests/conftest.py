@@ -1,4 +1,5 @@
 """Fixtures for SinricPro tests."""
+
 from __future__ import annotations
 
 from collections.abc import Generator
@@ -17,9 +18,7 @@ from custom_components.sinricpro.const import DOMAIN
 @pytest.fixture
 def mock_api() -> Generator[AsyncMock, None, None]:
     """Mock SinricPro API."""
-    with patch(
-        "custom_components.sinricpro.api.SinricProApi", autospec=True
-    ) as mock:
+    with patch("custom_components.sinricpro.api.SinricProApi", autospec=True) as mock:
         api = mock.return_value
         api.validate_api_key = AsyncMock(return_value=True)
         api.get_devices = AsyncMock(return_value=[])
@@ -30,9 +29,7 @@ def mock_api() -> Generator[AsyncMock, None, None]:
 @pytest.fixture
 def mock_api_class() -> Generator[MagicMock, None, None]:
     """Mock SinricPro API class."""
-    with patch(
-        "custom_components.sinricpro.api.SinricProApi", autospec=True
-    ) as mock_class:
+    with patch("custom_components.sinricpro.api.SinricProApi", autospec=True) as mock_class:
         api = mock_class.return_value
         api.validate_api_key = AsyncMock(return_value=True)
         api.get_devices = AsyncMock(return_value=[])
@@ -43,9 +40,7 @@ def mock_api_class() -> Generator[MagicMock, None, None]:
 @pytest.fixture
 def mock_sse() -> Generator[MagicMock, None, None]:
     """Mock SSE client."""
-    with patch(
-        "custom_components.sinricpro.sse.SinricProSSE", autospec=True
-    ) as mock:
+    with patch("custom_components.sinricpro.sse.SinricProSSE", autospec=True) as mock:
         sse = mock.return_value
         sse.connect = AsyncMock()
         sse.disconnect = AsyncMock()
@@ -56,9 +51,7 @@ def mock_sse() -> Generator[MagicMock, None, None]:
 @pytest.fixture
 def mock_sse_class() -> Generator[MagicMock, None, None]:
     """Mock SSE client class."""
-    with patch(
-        "custom_components.sinricpro.sse.SinricProSSE", autospec=True
-    ) as mock_class:
+    with patch("custom_components.sinricpro.sse.SinricProSSE", autospec=True) as mock_class:
         sse = mock_class.return_value
         sse.connect = AsyncMock()
         sse.disconnect = AsyncMock()

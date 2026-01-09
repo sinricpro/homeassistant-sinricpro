@@ -1,11 +1,11 @@
 {
   "domain": "sinricpro",
   "name": "SinricPro",
-  "version": "1.0.0",
-  "documentation": "https://github.com/sinricpro/homeassistant-sinricpro",
-  "issue_tracker": "https://github.com/sinricpro/homeassistant-sinricpro/issues",
-  "requirements": ["aiohttp>=3.9.0"],
   "codeowners": ["@sinricpro"],
   "config_flow": true,
-  "iot_class": "cloud_push"
+  "documentation": "https://github.com/sinricpro/homeassistant-sinricpro",
+  "iot_class": "cloud_push",
+  "issue_tracker": "https://github.com/sinricpro/homeassistant-sinricpro/issues",
+  "requirements": ["aiohttp>=3.9.0"],
+  "version": "1.0.0"
 }

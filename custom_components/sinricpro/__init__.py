@@ -1,4 +1,5 @@
 """The SinricPro integration."""
+
 from __future__ import annotations
 
 import logging
@@ -15,11 +16,9 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .api import SinricProApi
 from .const import DOMAIN
 from .coordinator import SinricProDataUpdateCoordinator
-from .exceptions import (
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProTimeoutError,
-)
+from .exceptions import SinricProAuthenticationError
+from .exceptions import SinricProConnectionError
+from .exceptions import SinricProTimeoutError
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -93,9 +92,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.debug("Shutting down SinricPro coordinator")
         await coordinator.async_shutdown()
 
-    entry.async_on_unload(
-        hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, _async_shutdown)
-    )
+    entry.async_on_unload(hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, _async_shutdown))
 
     # Forward entry setup to platforms
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "SinricPro",
+        "description": "Insira sua chave API do SinricPro para conectar seus dispositivos.",
+        "data": {
+          "api_key": "Chave API"
+        },
+        "data_description": {
+          "api_key": "Sua chave API do SinricPro do painel do SinricPro."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reautenticar SinricPro",
+        "description": "Sua chave API do SinricPro não é mais válida. Insira uma nova chave API para reconectar {title}.",
+        "data": {
+          "api_key": "Chave API"
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigurar SinricPro",
+        "description": "Atualize sua chave API do SinricPro.",
+        "data": {
+          "api_key": "Chave API"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Chave API inválida. Por favor, verifique suas credenciais.",
+      "cannot_connect": "Falha ao conectar ao SinricPro. Por favor, verifique sua conexão de rede.",
+      "timeout": "Tempo de conexão esgotado. Por favor, tente novamente.",
+      "rate_limit": "Limite de taxa excedido. Por favor, aguarde um momento e tente novamente.",
+      "unknown": "Ocorreu um erro inesperado. Por favor, tente novamente."
+    },
+    "abort": {
+      "already_configured": "SinricPro já está configurado com esta chave API.",
+      "reauth_successful": "Reautenticação bem-sucedida.",
+      "reauth_failed": "Reautenticação falhou.",
+      "reconfigure_successful": "Reconfiguração bem-sucedida."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opções do SinricPro",
+        "description": "Configure as opções de integração do SinricPro."
+      }
+    }
+  }
+}

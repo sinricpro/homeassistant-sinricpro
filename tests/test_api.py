@@ -1,7 +1,6 @@
 """Tests for SinricPro API client."""
-from __future__ import annotations
 
-import asyncio
+from __future__ import annotations
 
 import aiohttp
 import pytest
@@ -9,19 +8,15 @@ from aioresponses import aioresponses
 
 from custom_components.sinricpro.api import Device
 from custom_components.sinricpro.api import SinricProApi
-from custom_components.sinricpro.const import (
-    API_BASE_URL,
-    API_DEVICES_ENDPOINT,
-    DEVICE_TYPE_SWITCH,
-)
-from custom_components.sinricpro.exceptions import (
-    SinricProApiError,
-    SinricProAuthenticationError,
-    SinricProConnectionError,
-    SinricProDeviceNotFoundError,
-    SinricProRateLimitError,
-    SinricProTimeoutError,
-)
+from custom_components.sinricpro.const import API_BASE_URL
+from custom_components.sinricpro.const import API_DEVICES_ENDPOINT
+from custom_components.sinricpro.const import DEVICE_TYPE_SWITCH
+from custom_components.sinricpro.exceptions import SinricProApiError
+from custom_components.sinricpro.exceptions import SinricProAuthenticationError
+from custom_components.sinricpro.exceptions import SinricProConnectionError
+from custom_components.sinricpro.exceptions import SinricProDeviceNotFoundError
+from custom_components.sinricpro.exceptions import SinricProRateLimitError
+from custom_components.sinricpro.exceptions import SinricProTimeoutError
 
 
 @pytest.fixture
@@ -43,9 +38,7 @@ def api(session: aiohttp.ClientSession) -> SinricProApi:
     return SinricProApi("test_api_key", session)
 
 
-async def test_api_validate_key_success(
-    api: SinricProApi, api_url: str
-) -> None:
+async def test_api_validate_key_success(api: SinricProApi, api_url: str) -> None:
     """Test successful API key validation."""
     with aioresponses() as m:
         m.get(api_url, payload={"devices": []})
@@ -54,9 +47,7 @@ async def test_api_validate_key_success(
         assert result is True
 
 
-async def test_api_validate_key_invalid(
-    api: SinricProApi, api_url: str
-) -> None:
+async def test_api_validate_key_invalid(api: SinricProApi, api_url: str) -> None:
     """Test invalid API key validation."""
     with aioresponses() as m:
         m.get(api_url, status=401)
@@ -65,9 +56,7 @@ async def test_api_validate_key_invalid(
             await api.validate_api_key()
 
 
-async def test_api_validate_key_forbidden(
-    api: SinricProApi, api_url: str
-) -> None:
+async def test_api_validate_key_forbidden(api: SinricProApi, api_url: str) -> None:
     """Test forbidden API key validation."""
     with aioresponses() as m:
         m.get(api_url, status=403)
@@ -83,13 +72,13 @@ async def test_api_get_devices(api: SinricProApi, api_url: str) -> None:
             {
                 "id": "device_123",
                 "name": "Living Room Light",
-                "deviceType": "switch",
+                "deviceType": DEVICE_TYPE_SWITCH,
                 "powerState": "on",
             },
             {
                 "id": "device_456",
                 "name": "Kitchen Light",
-                "deviceType": "switch",
+                "deviceType": DEVICE_TYPE_SWITCH,
                 "powerState": "off",
             },
         ]
@@ -162,9 +151,7 @@ async def test_api_rate_limit(api: SinricProApi, api_url: str) -> None:
         assert exc_info.value.retry_after == 60
 
 
-async def test_api_rate_limit_no_retry_header(
-    api: SinricProApi, api_url: str
-) -> None:
+async def test_api_rate_limit_no_retry_header(api: SinricProApi, api_url: str) -> None:
     """Test rate limit error without Retry-After header."""
     with aioresponses() as m:
         m.get(api_url, status=429)
@@ -217,10 +204,10 @@ async def test_api_timeout(api: SinricProApi, api_url: str) -> None:
     """Test timeout error handling."""
     with aioresponses() as m:
         # Simulate timeout for all retries
-        m.get(api_url, exception=asyncio.TimeoutError())
-        m.get(api_url, exception=asyncio.TimeoutError())
-        m.get(api_url, exception=asyncio.TimeoutError())
-        m.get(api_url, exception=asyncio.TimeoutError())
+        m.get(api_url, exception=TimeoutError())
+        m.get(api_url, exception=TimeoutError())
+        m.get(api_url, exception=TimeoutError())
+        m.get(api_url, exception=TimeoutError())
 
         with pytest.raises(SinricProTimeoutError):
             await api.get_devices()
