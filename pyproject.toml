@@ -1,6 +1,6 @@
 [project]
 name = "sinricpro-homeassistant"
-version = "1.0.0"
+version = "2.0.0"
 description = "SinricPro integration for Home Assistant"
 readme = "README.md"
 license = {text = "MIT"}
