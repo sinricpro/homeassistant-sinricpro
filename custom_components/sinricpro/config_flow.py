@@ -5,10 +5,10 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import voluptuous as vol  # type: ignore[import-untyped]
+import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.config_entries import ConfigFlow
-from homeassistant.config_entries import ConfigFlowResult  # type: ignore[attr-defined]
+from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.config_entries import OptionsFlow
 from homeassistant.const import CONF_API_KEY
 from homeassistant.core import callback
@@ -43,7 +43,7 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> SinricProOptionsFlow:
         """Get the options flow for this handler."""
-        return SinricProOptionsFlow(config_entry)
+        return SinricProOptionsFlow()
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle the initial step.
@@ -200,14 +200,6 @@ class SinricProConfigFlow(ConfigFlow, domain=DOMAIN):
 
 class SinricProOptionsFlow(OptionsFlow):
     """Handle options flow for SinricPro."""
-
-    def __init__(self, config_entry: ConfigEntry) -> None:
-        """Initialize options flow.
-
-        Args:
-            config_entry: The config entry.
-        """
-        self.config_entry = config_entry
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Manage the options.

@@ -27,8 +27,17 @@ def api_url() -> str:
 
 @pytest.fixture
 async def session() -> aiohttp.ClientSession:
-    """Create aiohttp session."""
-    async with aiohttp.ClientSession() as session:
+    """Create aiohttp session.
+
+    Use the ThreadedResolver instead of aiohttp's default aiodns/pycares
+    resolver. pycares eagerly starts a process-global daemon thread
+    (``_run_safe_shutdown_loop``) when its DNS channel is created, and that
+    thread never exits, which trips pytest-homeassistant-custom-component's
+    ``verify_cleanup`` thread-leak assertion at teardown. aioresponses mocks
+    every request here, so the resolver is never actually used.
+    """
+    connector = aiohttp.TCPConnector(resolver=aiohttp.ThreadedResolver())
+    async with aiohttp.ClientSession(connector=connector) as session:
         yield session
 
 

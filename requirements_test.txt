@@ -1,6 +1,6 @@
-pytest>=8.0.0,<8.1
-pytest-asyncio
-pytest-cov
+# pytest, pytest-asyncio and pytest-cov are provided (and version-pinned to
+# match Home Assistant) by pytest-homeassistant-custom-component. Do not pin
+# them here or pip resolution will conflict with the HA-pinned versions.
 pytest-homeassistant-custom-component>=0.13.0
 aioresponses>=0.7.6
 ruff>=0.4.0
