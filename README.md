@@ -32,8 +32,8 @@ A Home Assistant custom integration for [SinricPro](https://sinric.pro) that all
 
 ### Manual Installation
 
-1. Download the latest release from the [releases page](https://github.com/sinricpro/homeassistant-sinricpro/releases)
-2. Extract the `sinricpro` folder to your `custom_components` directory
+1. Download the source code for the latest release from the [releases page](https://github.com/sinricpro/homeassistant-sinricpro/releases) (or clone this repository)
+2. Copy the `custom_components/sinricpro` folder into the `custom_components` directory of your Home Assistant configuration
 3. Restart Home Assistant
 
 ## Configuration
